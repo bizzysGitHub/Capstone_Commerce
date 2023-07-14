@@ -1,9 +1,9 @@
 import './cart-item.styles.scss'
 import { CartContext } from '../../contexts/cart-contexts'
-import IStoreItems from '../../interfaces/storeItems';
+import IStoreProducts from '../../interfaces/products';
 import { useContext, useState } from 'react';
 type Props = {
-    item: IStoreItems
+    item: IStoreProducts
 }
 
 const CartItem = ({ item: { id, name, price, imageUrl, quantity = 0 } }: Props) => {

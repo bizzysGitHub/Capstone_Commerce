@@ -1,24 +1,12 @@
 // import React from 'react'
 // type Props = {}
- import { useContext } from 'react'
-import { ProductsContext } from '../../contexts/products-contexts'
-import ProductCard from '../../components/product-card/product-card-component'
-import './shop.styles.scss'
+import CategoryPreview from "../../components/category-preview/category-preview.component"
 
-
-const Shop = () => {
-  const {products} = useContext(ProductsContext)
-
-  return (
-    <div className='products-container'>
-        { products.map((product) => (
-        <ProductCard key={product.id} product={product}/>
-        
-    ))}
-    </div>
-  )
-}
-
+const Shop = () => 
+(<>
+ <CategoryPreview/>
+ </>
+);
 export default Shop
 
 

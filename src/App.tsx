@@ -2,7 +2,7 @@
 import Navbar from './components/nav-bar/nav-bar.component'
 import './index.scss'
 import { UserProvider } from './contexts/users-contexts'
-import { ProductsProvider } from './contexts/products-contexts'
+import { CategoriesProvider } from './contexts/categories-contexts'
 import { CartProvider } from './contexts/cart-contexts'
 
 function App() {
@@ -11,12 +11,12 @@ function App() {
   return (
     <>
       <UserProvider>
-        <ProductsProvider>
+        <CategoriesProvider>
           <CartProvider>
             <Navbar />
 
           </CartProvider>
-        </ProductsProvider>
+        </CategoriesProvider>
       </UserProvider>
     </>
 

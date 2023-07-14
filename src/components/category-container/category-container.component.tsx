@@ -2,11 +2,11 @@
 // import { categories } from '../../categories'
 import './category-container.styles.scss'
 
-type DirectoryProps = {
+type Props = {
     children: React.ReactNode;
 }
 
-const Directory = ({children}:DirectoryProps)  =>  (
+const Directory = ({children}:Props)  =>  (
     <div className="directory-container">
         {children}
     {/* {categories.map((category) => (

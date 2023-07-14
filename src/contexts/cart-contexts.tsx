@@ -1,5 +1,6 @@
 import { Dispatch, ReactNode, SetStateAction, createContext, useState, useEffect } from "react";
-import IStoreItems from "./../interfaces/storeItems"
+import IStoreProducts from "../interfaces/products"
+import IStoreItems from "../interfaces/storeItems";
 
 type Props = {
     children: ReactNode

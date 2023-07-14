@@ -1,9 +1,9 @@
 
-import IStoreItems from "../../interfaces/storeItems"
 import './product-card.styles.scss'
 import Button from "../button/button.component"
 import { useContext, useState } from "react"
 import { CartContext } from "../../contexts/cart-contexts"
+import IStoreItems from "../../interfaces/storeItems"
 
 type Props = {
     product: IStoreItems

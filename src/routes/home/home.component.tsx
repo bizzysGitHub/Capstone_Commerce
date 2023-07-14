@@ -1,5 +1,5 @@
 import React from 'react'
-import {categories} from '../../categories'
+import {categories} from '../../home-categories'
 import Directory from '../../components/category-container/category-container.component';
 import CategoryItem from '../../components/category-item/category-item.component';
 

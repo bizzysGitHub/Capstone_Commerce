@@ -1,11 +1,11 @@
 import React, { ReactNode, useContext } from 'react'
-import IStoreItems from '../../interfaces/storeItems'
+import IStoreProducts from '../../interfaces/products'
 import { CartContext } from '../../contexts/cart-contexts'
 import './checkout-item.styles.scss'
 
 type Props = {
 
-    item: IStoreItems
+    item: IStoreProducts
 }
 
 const CheckoutItem = ({ item }: Props) => {

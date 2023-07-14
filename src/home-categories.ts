@@ -25,3 +25,8 @@
     "imageUrl": "https://i.ibb.co/R70vBrQ/men.png"
   }
 ]
+
+
+/**
+ * change this page to grab categories from firebase and not hard coded!
+ */
