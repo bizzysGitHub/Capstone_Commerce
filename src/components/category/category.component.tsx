@@ -1,5 +1,5 @@
-import { Key, useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Suspense, useContext, useEffect, useState } from "react";
+import { Await, useParams } from "react-router-dom";
 import { CategoriesContext } from "../../contexts/categories-contexts";
 import IStoreProducts from "../../interfaces/products";
 import ProductCard from "../product-card/product-card-component";
@@ -10,35 +10,29 @@ import './category.styles.scss'
 
 const Categories = () => {
   const { product } = useParams();
-  const { categoriesMap } =  useContext(CategoriesContext)
+  const { categoriesMap } = useContext(CategoriesContext)
 
-  console.log(categoriesMap)
-  /**
-   * 
-   * if categoresMap doesnt contain product throw error component, 
-   * 
-   * if it does match the product with the item in categories map and render all the data
-  */
-  // const allProducts: IStoreProducts['items'] = categoriesMap[product as keyof typeof categoriesMap]
+  const allProducts: IStoreProducts['items'] = categoriesMap[product as keyof typeof categoriesMap];
 
-  const allProducts: IStoreProducts['items'] = categoriesMap[product as keyof typeof categoriesMap]
-  
-  const [first, setfirst] = useState(allProducts)
+  const [category, setCategory] = useState(allProducts || {});
 
   useEffect(() => {
-    setfirst(allProducts)
-  }, [product, categoriesMap])
-  
-  
+    setCategory(allProducts)
+  }, [allProducts, category, product])
 
+  
   return (
-    <div className="category-container">
-     {
-      first && first.map((productItem: any) => 
-         (<ProductCard key={productItem.id} product={productItem} />)
-      )
-     }
-    </div>
+    <>
+      {Object.values(categoriesMap).length < 1
+        ? <h3>Loading...</h3>
+        : !allProducts
+          ? <h3>Error No Page Found</h3>
+          : <div className="category-container">
+            {
+              category && category.map((productItem: any) => (<ProductCard key={productItem.id} product={productItem} />))
+            }
+          </div>}
+    </>
   )
 }
 

@@ -5,6 +5,7 @@ import ProductCard from '../product-card/product-card-component';
 import { CategoriesContext } from '../../contexts/categories-contexts';
 import IStoreProducts from '../../interfaces/products';
 import './category-preview.styles.scss'
+import { Link } from 'react-router-dom';
 
 
 const SectionItemsPreview = (product: IStoreItems[]): ReactNode => {
@@ -33,7 +34,10 @@ const CategoryPreview = () => {
                         < div className='category-preview-container' key={id}>
                             <div >
                                 <h2>
+                                   <Link to={title}>
                                     <span className='title'>{title}</span>
+                                   
+                                   </Link>
                                 </h2>
                                 <div className='preview'>
                                     {

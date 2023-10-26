@@ -1,7 +1,7 @@
-import { useContext } from 'react'
+import { useContext, useRef } from 'react'
 import { CartContext } from '../../contexts/cart-contexts'
 import Button from '../button/button.component'
-import './cart-dropdown.styles.scss'
+import {CartItems, EmptyMessage, CartDropdownContainer} from'./cart-dropdown.styles'
 import CartItem from '../cart-item/cart-item-component';
 import {  useNavigate } from 'react-router-dom';
 
@@ -10,6 +10,7 @@ import {  useNavigate } from 'react-router-dom';
 const CartDropdown = () => {
   const { itemsInCart, setShowDropDown } = useContext(CartContext);
   const navigate =useNavigate();
+  const cart = useRef<null | HTMLDivElement>(null)
 
   const goToCheckoutHandler = () => {
     navigate('/checkout')
@@ -18,17 +19,18 @@ const CartDropdown = () => {
   
 
   return (
-    <div className='cart-dropdown-container'>
-      <div className="cart-items">
-        {itemsInCart.map((item) => {
-          return (
-            <CartItem item={item} key={item.id} />
-          )
-        })}
+    <CartDropdownContainer>
+      <CartItems ref={cart}>
+        { 
+        itemsInCart.length < 1
+        ? <EmptyMessage> No items in your cart</EmptyMessage>
+        : itemsInCart.map((item) =>( <CartItem item={item} key={item.id} />))
+        }
+        
 
+      </CartItems>
           <Button onClick={goToCheckoutHandler}>Go To Checkout</Button>
-      </div>
-    </div>
+    </CartDropdownContainer>
   )
 };
 
