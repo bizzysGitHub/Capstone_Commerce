@@ -1,4 +1,4 @@
-import { Dispatch, ReactNode, SetStateAction, createContext, useState, useEffect } from "react";
+import { Dispatch, ReactNode, SetStateAction, createContext, useReducer } from "react";
 import IStoreProducts from "../interfaces/products"
 import IStoreItems from "../interfaces/storeItems";
 
@@ -7,11 +7,11 @@ type Props = {
 }
 export default interface ICartContext {
     itemsInCart: IStoreItems[],
-    setItemsInCart: Dispatch<SetStateAction<IStoreItems[]>>,
+    // setItemsInCart: Dispatch<SetStateAction<IStoreItems[]>>,
     totalItems: number
-    setTotalItems: Dispatch<SetStateAction<number>>, 
+    // setTotalItems: Dispatch<SetStateAction<number>>,
     totalPrice: number
-    setTotalPrice: Dispatch<SetStateAction<number>>,
+    // setTotalPrice: Dispatch<SetStateAction<number>>,
     addItemToCart: (productToAdd: IStoreItems) => void
     removeItemFromCart: (cartItemToRemove: IStoreItems) => void
     clearItemFromCart: (cartItemToClear: IStoreItems) => void
@@ -23,11 +23,11 @@ export default interface ICartContext {
 
 export const CartContext = createContext<ICartContext>({
     itemsInCart: [],
-    setItemsInCart: () => null,
+    // setItemsInCart: () => null,
     totalItems: 0,
-    setTotalItems: () => null,
+    // setTotalItems: () => null,
     totalPrice: 0,
-    setTotalPrice: () => null,
+    // setTotalPrice: () => null,
     addItemToCart: () => null,
     removeItemFromCart: () => null,
     clearItemFromCart: () => null,
@@ -76,49 +76,115 @@ const DecreaseItemQuantity = (cartItems: IStoreItems[], cartItemToRemove: IStore
 const clearCartItem = (cartItems: IStoreItems[], cartItemToClear: IStoreItems) => cartItems.filter(cartItem => cartItem.id !== cartItemToClear.id)
 
 
+type State = {
+    itemsInCart: IStoreItems[],
+    totalItems: number,
+    totalPrice: number,
+    showDropdown: boolean,
+
+};
+
+
+type CartAction =
+    | { type: 'SET_CART_ITEMS', payload: State }
+    // | { type: 'CLEAR_CART', payload: State }
+    | { type: 'SHOW_DROPDOWN', payload: boolean };
+
+
+
+const INITIAL_STATE: State = {
+    itemsInCart: [],
+    totalItems: 0,
+    totalPrice: 0,
+    showDropdown: false
+
+};
+
+const CartReducer = (state: State, action: CartAction) => {
+
+    const { type, payload } = action;
+
+    switch (type) {
+        case 'SET_CART_ITEMS':
+            return {
+                ...state,
+                ...payload
+            }
+
+        case 'SHOW_DROPDOWN': 
+            return{
+                ...state,
+                showDropdown:!state.showDropdown,
+
+            }
+
+        default:
+            throw new Error(`Unhandled action type ${type}`)
+    }
+};
+
 
 export const CartProvider = ({ children }: Props) => {
-    const [itemsInCart, setItemsInCart] = useState<IStoreItems[]>([]);
-    const [totalItems, setTotalItems] = useState(0);
-    const [totalPrice, setTotalPrice] = useState(0)
-    const [showDropdown, setShowDropDown] = useState(false);
 
 
-    useEffect(() => {
-        const newCartCount = itemsInCart.reduce((total, cartItem) => total + Number(cartItem.quantity), 0)
-
-        setTotalItems(newCartCount)
-
-    }, [itemsInCart]);
+    const [{ itemsInCart, totalItems, totalPrice, showDropdown }, dispatch] = useReducer(CartReducer, INITIAL_STATE);
+   
+    // const [showDropdown, dispatch2] = useReducer(() => !INITIAL_STATE.showDropdown, INITIAL_STATE);
 
 
-    useEffect(() => {
-        const newCartPrice = itemsInCart.reduce((total, cartItem) => total + Number(cartItem.quantity) * cartItem.price, 0)
+    const updateCartReducer = (newCartItem: IStoreItems[]) => {
+        const newCartCount = newCartItem.reduce((total, cartItem) => total + Number(cartItem.quantity), 0)
 
-        setTotalPrice(newCartPrice)
+        const newCartPrice = newCartItem.reduce((total, cartItem) => total + Number(cartItem.quantity) * cartItem.price, 0)
 
-    }, [itemsInCart]);
+        dispatch({ type: 'SET_CART_ITEMS', payload: { itemsInCart: newCartItem, totalItems: newCartCount, totalPrice: newCartPrice, showDropdown } })
+
+        // dispatch({type:'CLEAR_CART', payload:INITIAL_STATE})
+
+    };
+
+    const setShowDropDown = () => {
+        dispatch({ type: 'SHOW_DROPDOWN', payload:showDropdown })
+    };
 
 
     const addItemToCart = (productToAdd: IStoreItems) => {
-        setItemsInCart(IncreaseItemQuantity(itemsInCart, productToAdd));
+        const addedItemsArray = IncreaseItemQuantity(itemsInCart, productToAdd);
+        updateCartReducer(addedItemsArray)
     };
 
     const removeItemFromCart = (cartItemToRemove: IStoreItems) => {
-        setItemsInCart(DecreaseItemQuantity(itemsInCart, cartItemToRemove));
+        const deletedItemArray = DecreaseItemQuantity(itemsInCart, cartItemToRemove);
+        updateCartReducer(deletedItemArray)
     };
     const clearItemFromCart = (cartItemToClear: IStoreItems) => {
-        setItemsInCart(clearCartItem(itemsInCart, cartItemToClear));
-    };
+        const clearedArray = clearCartItem(itemsInCart, cartItemToClear);
+        updateCartReducer(clearedArray)
 
+    };
 
 
 
     const value = {
-        itemsInCart, setItemsInCart, totalItems, setTotalItems, addItemToCart,
-        totalPrice, setTotalPrice, removeItemFromCart, clearItemFromCart, showDropdown, setShowDropDown
+        itemsInCart,
+        // setItemsInCart,
+        totalItems,
+        // setTotalItems,
+        addItemToCart,
+        totalPrice,
+        // setTotalPrice,
+        removeItemFromCart,
+        clearItemFromCart,
+        showDropdown,
+        setShowDropDown
     };
     return (
         <CartContext.Provider value={value}>{children}</CartContext.Provider>
     )
 };
+
+/**
+ * 
+ * 3178036272
+ * 
+ */

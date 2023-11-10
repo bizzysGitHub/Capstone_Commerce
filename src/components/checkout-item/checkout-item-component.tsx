@@ -1,16 +1,17 @@
 import React, { ReactNode, useContext } from 'react'
-import IStoreProducts from '../../interfaces/products'
+// import IStoreProducts from '../../interfaces/products'
+import IStoreItems from "../../interfaces/storeItems";
 import { CartContext } from '../../contexts/cart-contexts'
 import './checkout-item.styles.scss'
 
 type Props = {
 
-    item: IStoreProducts
+    item: IStoreItems
 }
 
 const CheckoutItem = ({ item }: Props) => {
     const { id, name, imageUrl, price, quantity = 0 } = item;
-    const { addItemToCart, removeItemFromCart, setItemsInCart,clearItemFromCart } = useContext(CartContext)
+    const { addItemToCart, removeItemFromCart,clearItemFromCart } = useContext(CartContext)
 ;
 
     const clearItemHandler = () => clearItemFromCart(item)
