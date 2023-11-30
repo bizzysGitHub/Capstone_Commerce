@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Button from '../button/button.component'
 
-
+// testing switching from scss to styled components
 
 export const CartItems = styled.div`
     height: 240px;

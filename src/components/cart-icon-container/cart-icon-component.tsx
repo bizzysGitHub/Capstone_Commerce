@@ -5,7 +5,6 @@ import { CartContext } from '../../contexts/cart-contexts';
 
 
 type Props = {
-  
   // children: ReactNode;
   onClick: () => void;
 };
