@@ -1,9 +1,14 @@
 
-import './product-card.styles.scss'
 import Button from "../button/button.component"
 import { useContext, useState } from "react"
 import { CartContext } from "../../contexts/cart-contexts"
 import IStoreItems from "../../interfaces/storeItems"
+import {ProductCardContainer,
+  ProductImage,
+  AddToCartButton,
+  FooterContainer,
+  ProductName,
+  ProductPrice} from './product-card.styles'
 
 type Props = {
     product: IStoreItems
@@ -19,14 +24,14 @@ const ProductCard = ({product}:Props) => {
   const addProductToCart = () => addItemToCart(product)
 
   return (
-    <div className="product-card-container" key={id}>
-        <img src={imageUrl} alt={name}  />
-        <div className="footer">
-            <div className="name">{name}</div>
-            <div className="price">{price}</div>
-        </div>
-            <Button buttonType="inverted" onClick={addProductToCart}>Add to Card</Button>
-    </div>
+    <ProductCardContainer key={id}>
+    <ProductImage src={imageUrl} alt={name}  />
+    <FooterContainer>
+        <ProductName>{name}</ProductName>
+        <ProductPrice>{price}</ProductPrice>
+    </FooterContainer>
+        <AddToCartButton buttonType="inverted" onClick={addProductToCart}>Add to Cart</AddToCartButton>
+</ProductCardContainer>
   )
 }
 

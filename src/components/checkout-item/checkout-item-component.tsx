@@ -2,7 +2,7 @@ import React, { ReactNode, useContext } from 'react'
 // import IStoreProducts from '../../interfaces/products'
 import IStoreItems from "../../interfaces/storeItems";
 import { CartContext } from '../../contexts/cart-contexts'
-import './checkout-item.styles.scss'
+import {CheckoutItemContainer, ImageContainer, Name, Quantity, Price, Arrow, Value, RemoveButton} from './checkout-item.styles'
 
 type Props = {
 
@@ -20,24 +20,24 @@ const CheckoutItem = ({ item }: Props) => {
 
 
     return (
-        <div key={id} className='checkout-item-container'>
-            <img className='image-container' src={imageUrl} />
-            <span className='name'>{name}</span>
-            <span className='quantity'>
-                <div className='arrow' onClick={() => removeItemHandler()}>
+        <CheckoutItemContainer key={id}>
+            <ImageContainer src={imageUrl} />
+            <Name className='name'>{name}</Name>
+            <Quantity>
+                <Arrow onClick={() => removeItemHandler()}>
                     &#10094;
-                </div>
-                <span className='value'>
+                </Arrow>
+                <Value>
                     {quantity}
-                </span>
-                <div className='arrow' onClick={() => addItemHandler()}>
+                </Value>
+                <Arrow onClick={() => addItemHandler()}>
                     &#10095;
-                </div>
-            </span>
+                </Arrow>
+            </Quantity>
 
-            <span className='price'>${price * quantity}</span>
-            <div className='remove-button' onClick={clearItemHandler}>&#10005;</div>
-        </div>
+            <Price>${price * quantity}</Price>
+            <RemoveButton onClick={clearItemHandler}>&#10005;</RemoveButton>
+        </CheckoutItemContainer>
     )
 }
 

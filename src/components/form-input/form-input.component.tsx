@@ -1,7 +1,11 @@
 import { InputHTMLAttributes } from "react"
-import './form-input.style.scss'
+import {GroupContainer,
+    FormComponent,
+    PasswordInput,
+    FormInputLabel
+} from'./form-input.style'
 
-interface iHateTypescriptShxt extends InputHTMLAttributes<HTMLInputElement> {
+interface formIpProps extends InputHTMLAttributes<HTMLInputElement> {
     label: string,
     value: string,
 
@@ -9,21 +13,34 @@ interface iHateTypescriptShxt extends InputHTMLAttributes<HTMLInputElement> {
 
 //fix this clean it up
 
-export const FormInput = ({ label, ...otherInputProps }: iHateTypescriptShxt) => {
-    return (
-        <div className="group">
-             <input
-                className="form-input"
-                {...otherInputProps} />
-            {label && (
-                <label className={
-                    `${otherInputProps?.value.length ? 'shrink' : ''} form-input-label`}>
-                    {label}
-                </label> 
-                )}
+// export const FormInput = ({ label, ...otherInputProps }: formIpProps) => {
+//     return (
+//         <div className="group">
+//              <input
+//                 className="form-input"
+//                 {...otherInputProps} />
+//             {label && (
+//                 <label className={
+//                     `${otherInputProps?.value.length ? 'shrink' : ''} form-input-label`}>
+//                     {label}
+//                 </label> 
+//                 )}
            
-        </div>
+//         </div>
 
-    )
+//     )
 
-}
+// }
+
+export const FormInput = ({ label, ...otherInputProps }: formIpProps) => {
+    return (
+      <GroupContainer>
+        <FormComponent {...otherInputProps} />
+        { label && (
+            <FormInputLabel className={`${otherInputProps?.value.length ? 'shrink' : ''} form-input-label`}>
+                {label}
+            </FormInputLabel>
+        )}
+      </GroupContainer>
+    );
+  };

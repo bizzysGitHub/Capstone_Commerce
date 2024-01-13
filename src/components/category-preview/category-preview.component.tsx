@@ -4,50 +4,58 @@ import IStoreItems from '../../interfaces/storeItems';
 import ProductCard from '../product-card/product-card-component';
 import { CategoriesContext } from '../../contexts/categories-contexts';
 import IStoreProducts from '../../interfaces/products';
-import './category-preview.styles.scss'
+import { CategoryPreviewContainer, Title, Preview } from './category-preview.styles'
 import { Link } from 'react-router-dom';
 
 
-const SectionItemsPreview = (product: IStoreItems[]): ReactNode => {
-    return product.reduce((acc: any, item) => {
-        acc.length < 4
-            ? acc.push(<ProductCard key={item.id} product={item} />)
-            : acc
-        return acc
-    }, [])
+//IStoreProducts['items']
+//categoriesMap[title as keyof typeof categoriesMap]
+
+
+
+const SectionItemsPreview = (products: IStoreProducts[] | IStoreItems): ReactNode[] => {
+
+    const previewItemsArray = Object.values(products)
+        .map((itemsArray): ReactNode[] => {
+            return itemsArray.reduce((acc: ReactNode[], items: IStoreItems) => {
+                acc.length < 4
+                    ? acc.push(<ProductCard key={items.id} product={items} />)
+                    : acc
+                return acc
+            }, [])
+        });
+    return previewItemsArray;
+
 }
 
 const CategoryPreview = () => {
     const { categoriesMap } = useContext(CategoriesContext)
+    const category = categoriesMap
     return (
         <>
             {
                 Object.keys(categoriesMap).map((title, id) => {
-                    /**
-                     * No index signature with a parameter of type 'string' was found on type.
-                     * Using a type assertion to solve the error
-                     * [title as keyof typeof categoriesMap] allows the const category to reference the categoriesMap[title]
-                     * 
-                     * */
-                    const category: IStoreProducts['items'] = categoriesMap[title as keyof typeof categoriesMap]
                     return (
-                        < div className='category-preview-container' key={id}>
-                            <div >
+                        <CategoryPreviewContainer key={id}>
+                            <div>
                                 <h2>
-                                   <Link to={title}>
-                                    <span className='title'>{title}</span>
-                                   
-                                   </Link>
+                                    <Link to={title}>
+                                        <Title>
+                                            {title}
+                                        </Title>
+                                    </Link>
                                 </h2>
-                                <div className='preview'>
+                                <Preview>
+
                                     {
                                         SectionItemsPreview(category)
                                     }
-                                </div>
+                                </Preview>
                             </div>
-                        </div>
+                        </CategoryPreviewContainer>
                     )
                 })
+
             }
 
         </>

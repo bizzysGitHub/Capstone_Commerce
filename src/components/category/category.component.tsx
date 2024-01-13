@@ -3,9 +3,10 @@ import { Await, useParams } from "react-router-dom";
 import { CategoriesContext } from "../../contexts/categories-contexts";
 import IStoreProducts from "../../interfaces/products";
 import ProductCard from "../product-card/product-card-component";
-import '../category-preview/category-preview.styles.scss'
+// import '../category-preview/category-preview.styles.scss'
+// import { CategoryPreviewContainer, Title, Preview } from '../category-preview/category-preview.styles'
 import ErrorPage from "../../error-page";
-import './category.styles.scss'
+import { CategoryContainer } from './category.styles'
 
 
 const Categories = () => {
@@ -27,11 +28,11 @@ const Categories = () => {
         ? <h3>Loading...</h3>
         : !allProducts
           ? <h3>Error No Page Found</h3>
-          : <div className="category-container">
+          : <CategoryContainer>
             {
               category && category.map((productItem: any) => (<ProductCard key={productItem.id} product={productItem} />))
             }
-          </div>}
+          </CategoryContainer>}
     </>
   )
 }

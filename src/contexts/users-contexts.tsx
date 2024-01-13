@@ -20,7 +20,7 @@ export const UserContext = createContext<IUserContext>({
 
 export const UserProvider = ({children}: Props) => {
     const [userData, setUserData] = useState<IUserContext["userData"]>(null) 
-    console.log(userData)
+   
     useEffect(() => {
        const unsubscribe =  onAuthStateChangeListener((user:IUserContext["userData"]) => { 
         setUserData(user)

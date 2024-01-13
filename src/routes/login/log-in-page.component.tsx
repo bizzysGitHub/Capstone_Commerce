@@ -1,7 +1,6 @@
-import React, { CSSProperties, ChangeEvent } from 'react'
 import SignUpForm from './sign-up/sign-up-form.component.tsx'
 import SignIn from './sign-in/sign-in.components.tsx'
-import './log-in-page.styles.scss'
+import { LoginPageContainer} from './log-in-page.styles'
 
 
 
@@ -18,11 +17,11 @@ const SignInPage = () => {
 // }
 
   return (
-    <div className='login-page-container'>
+    <LoginPageContainer>
     <SignIn />
     <SignUpForm />
     
-    </div>
+    </LoginPageContainer>
   )
 }
 

@@ -1,18 +1,17 @@
-// import {FC, ReactElement}  from 'react'
-// import { categories } from '../../categories'
-import './directory-container.styles.scss'
+
+import { DirectoryContainer } from './directory-container.styles'
 
 type Props = {
     children: React.ReactNode;
 }
 
 const Directory = ({children}:Props)  =>  (
-    <div className="directory-container">
+    <DirectoryContainer>
         {children}
     {/* {categories.map((category) => (
       <DirectoryItem key={category.id} category={category} />
      ))} */}
-  </div>
+  </DirectoryContainer>
 )
 
 export default Directory

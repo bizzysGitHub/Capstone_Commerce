@@ -9,18 +9,24 @@ type Props = {
 
 
 export default interface ICategoryContext {
-    categoriesMap:  object | IStoreProducts
-    setCategoriesMap: Dispatch<SetStateAction<IStoreProducts>>
+    // categoriesMap:  object | IStoreProducts
+    categoriesMap:  IStoreProducts[]
+    setCategoriesMap: Dispatch<SetStateAction<IStoreProducts[]>>
 }
 
 
 export const CategoriesContext = createContext<ICategoryContext>({
-    categoriesMap: {},
+    // categoriesMap: {},
+    categoriesMap: [],
     setCategoriesMap: () => null
 });
 
 
 export const CategoriesProvider = ({ children }: Props) => {
+    const [categoriesMap, setCategoriesMap] = useState<IStoreProducts[]>([])
+    const value = { categoriesMap, setCategoriesMap };
+
+
 
     useEffect(() => {
         const getDocs = async () => {
@@ -31,8 +37,6 @@ export const CategoriesProvider = ({ children }: Props) => {
         getDocs();
     }, [])
 
-    const [categoriesMap, setCategoriesMap] = useState({})
-    const value = { categoriesMap, setCategoriesMap };
 
 
     return <CategoriesContext.Provider value={value}>{children}</CategoriesContext.Provider>

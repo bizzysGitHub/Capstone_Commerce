@@ -1,6 +1,6 @@
 
 import { ButtonHTMLAttributes, ReactNode } from 'react'
-import './button.style.scss'
+import {ButtonContainer } from './button.style'
 
 
 // type bizzyButton ={
@@ -21,12 +21,12 @@ const Button = ({ children, buttonType, ...otherAttributes }: customButton) => {
 
 
     return (
-        <button
+        <ButtonContainer
             className={`${buttonType ? 'button-container ' + buttonTypeClassName[buttonType]: 'button-container'}`}
             {...otherAttributes}
         >
             {children}
-        </button>
+        </ButtonContainer>
     )
 }
 

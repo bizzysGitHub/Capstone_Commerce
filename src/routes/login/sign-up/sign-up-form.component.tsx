@@ -1,8 +1,9 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { handleNewUserWithEmailPassword } from '../../../utils/firebase/firebase';
 import { FormInput } from '../../../components/form-input/form-input.component';
-import '../log-in-page.styles.scss'
 import Button from '../../../components/button/button.component';
+import {SignUpContainer, Heading2} from '../log-in-page.styles'
+
 
 
 
@@ -49,8 +50,8 @@ const SignUpForm = () => {
 
     }
     return (
-        <div className='sign-up-container'>
-            <h2> Don't Have an Account?</h2>
+        <SignUpContainer>
+            <Heading2> Don't Have an Account?</Heading2>
             <span>Sign up with your email </span>
             <form onSubmit={handleSubmit}>
                 <FormInput
@@ -88,7 +89,7 @@ const SignUpForm = () => {
                 />
                <Button type='submit'>Lets Get Started</Button>
             </form>
-        </div>
+        </SignUpContainer>
     )
 }
 

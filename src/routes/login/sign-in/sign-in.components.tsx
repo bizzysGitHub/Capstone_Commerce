@@ -3,6 +3,7 @@ import { loginWithGooglePopup, signUserInWithEmailAndPassword } from '../../../u
 import Button from '../../../components/button/button.component'
 import { FormInput } from '../../../components/form-input/form-input.component'
 import { UserContext } from '../../../contexts/users-contexts'
+import {SignUpContainer} from '../log-in-page.styles'
 
 
 // type signInProps = { 
@@ -69,7 +70,7 @@ const SignIn = () => {
 
     }
     return (
-        <div className='sign-up-container'>
+        <SignUpContainer>
             <h2> I already have an account</h2>
             <span>Sign up with your email </span>
             <form onSubmit={handleSubmit}>
@@ -100,7 +101,7 @@ const SignIn = () => {
                     <Button onClick={googleLogin} buttonType='google'> Google Sign In</Button>
                 </div>
             </form>
-        </div>
+        </SignUpContainer>
 
     )
 
