@@ -10,9 +10,8 @@ import Shop from './routes/shop/shop.component.tsx'
 import Checkout from './routes/checkout/checkout-component.tsx'
 // import Categories from './components/categories/categories.component.jsx'
 import Categories from './components/category/category.component.js'
-
-//{ type }: { type: string }
-
+import { Provider } from 'react-redux'
+import { store } from './app/store.ts'
 
 
 const router = createBrowserRouter([
@@ -50,6 +49,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
+    <Provider store={store}>
     <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>,
 )

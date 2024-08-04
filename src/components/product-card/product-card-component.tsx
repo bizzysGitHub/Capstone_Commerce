@@ -16,7 +16,6 @@ type Props = {
 
 
 
-
 const ProductCard = ({product}:Props) => {
   const { addItemToCart } = useContext(CartContext);
   const {name, price, imageUrl, id} = product;

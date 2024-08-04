@@ -12,10 +12,10 @@ function App() {
     <>
       <UserProvider>
         <CategoriesProvider>
-          <CartProvider>
+          {/* <CartProvider> */}
             <Navbar />
 
-          </CartProvider>
+          {/* </CartProvider> */}
         </CategoriesProvider>
       </UserProvider>
     </>
