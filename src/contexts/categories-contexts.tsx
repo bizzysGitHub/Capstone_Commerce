@@ -31,7 +31,7 @@ export const CategoriesProvider = ({ children }: Props) => {
     useEffect(() => {
         const getDocs = async () => {
             const data = await getCategoriesAndDocs();
-            setCategoriesMap(data);
+            // setCategoriesMap(data);
         }
 
         getDocs();

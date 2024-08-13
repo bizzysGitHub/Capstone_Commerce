@@ -12,17 +12,17 @@ import { UserContext } from '../../contexts/users-contexts'
 import { signOutUser } from '../../utils/firebase/firebase'
 import CartIcon from '../cart-icon-container/cart-icon-component'
 import CartDropdown from '../../components/cart-dropdown/cart-dropdown-component'
-// import { CartContext } from '../../contexts/cart-contexts'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../app/store'
-import { showDropdown } from '../../features/cart-items/cartItemsSlice'
+import { showDropdown } from '../../features/cart-items/cartItemSlice'
+import { useAppSelector, useAppDispatch } from '../../app/hooks/custom'
+import CartState from '../../interfaces/cartItems'
 
 
 
 export default function Navbar() {
   const { userData } = useContext(UserContext)
-  const cart = useSelector((state: RootState) => state.cartItems)
-  const dispatch =useDispatch()
+  const cart = useAppSelector((state: {cartItems : CartState}) => state.cartItems)
+  const dispatch = useAppDispatch()
+
   const handleSignOut = async () => {
     await signOutUser()
   }

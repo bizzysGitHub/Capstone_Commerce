@@ -77,6 +77,7 @@ export const getCategoriesAndDocs = async () => {
   const querySnapshot = await getDocs(collection(db, "categories"));
   const categoryMap = querySnapshot.docs.reduce((acc: any , docSnapshot)=> {
         const {items, title} = docSnapshot.data();
+        //make first letter capitalized
           acc[title.toLowerCase()] = items;
           return acc
       }, {})

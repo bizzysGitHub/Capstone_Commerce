@@ -1,38 +1,55 @@
-import { Suspense, useContext, useEffect, useState } from "react";
-import { Await, useParams } from "react-router-dom";
-import { CategoriesContext } from "../../contexts/categories-contexts";
-import IStoreProducts from "../../interfaces/products";
+import {  useEffect } from "react";
+import { useParams } from "react-router-dom";
+
 import ProductCard from "../product-card/product-card-component";
 // import '../category-preview/category-preview.styles.scss'
 // import { CategoryPreviewContainer, Title, Preview } from '../category-preview/category-preview.styles'
-import ErrorPage from "../../error-page";
+
 import { CategoryContainer } from './category.styles'
+import {  useAppSelector } from "../../app/hooks/custom";
+// import { getCategories } from "../../features/categories/categorySlice";
+import IStoreItems from "../../interfaces/storeItems";
+
 
 
 const Categories = () => {
   const { product } = useParams();
-  const { categoriesMap } = useContext(CategoriesContext)
+  // const { categoriesMap } = useContext(CategoriesContext)
+  
+  const categoryData = useAppSelector((state) => state.categories)
+  // const dispatch = useAppDispatch()
+  const {isLoading,categoriesMap} = categoryData
 
-  const allProducts: IStoreProducts['items'] = categoriesMap[product as keyof typeof categoriesMap];
 
-  const [category, setCategory] = useState(allProducts || {});
+  
+  const allProducts: IStoreItems[] = categoriesMap[product as keyof typeof categoriesMap];
+
+  // const [category, setCategory] = useState(allProducts || {});
+  // console.log(allProducts);
+  
 
   useEffect(() => {
-    setCategory(allProducts)
-  }, [allProducts, category, product])
+    // setCategory(allProducts)
+    // const loadingShouldBeDifferent = async () => {
+    //   await dispatch(getCategories()).unwrap()
+    // }
+    // loadingShouldBeDifferent()
+
+  }, [])
 
   
   return (
     <>
-      {Object.values(categoriesMap).length < 1
-        ? <h3>Loading...</h3>
+      {isLoading
+        ? <h3> Loading...</h3>
         : !allProducts
           ? <h3>Error No Page Found</h3>
           : <CategoryContainer>
             {
-              category && category.map((productItem: any) => (<ProductCard key={productItem.id} product={productItem} />))
+              allProducts && allProducts.map((productItem: IStoreItems) => (<ProductCard key={productItem.id} product={productItem} />))
             }
           </CategoryContainer>}
+          
     </>
   )
 }

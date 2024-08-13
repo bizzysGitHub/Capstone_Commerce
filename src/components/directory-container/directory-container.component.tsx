@@ -8,9 +8,6 @@ type Props = {
 const Directory = ({children}:Props)  =>  (
     <DirectoryContainer>
         {children}
-    {/* {categories.map((category) => (
-      <DirectoryItem key={category.id} category={category} />
-     ))} */}
   </DirectoryContainer>
 )
 

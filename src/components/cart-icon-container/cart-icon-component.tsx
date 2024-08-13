@@ -1,21 +1,24 @@
 
-import { ReactNode, useContext } from 'react';
+// import { ReactNode, useContext } from 'react';
 import {ShoppingIcon, ItemCount,CartIconContainer} from'./cart-icon.styles';
-import { CartContext } from '../../contexts/cart-contexts';
+import { useAppSelector } from '../../app/hooks/custom';
+import CartState from '../../interfaces/cartItems';
+// import { RootState } from '../../app/store';
+// import { CartContext } from '../../contexts/cart-contexts';
 
 
 type Props = {
-  // children: ReactNode;
   onClick: () => void;
 };
 
 const CartIcon = ({onClick}:Props) => {
-  const {totalItems} = useContext(CartContext);
+  const cart = useAppSelector((state: { cartItems : CartState}) => state.cartItems)
+
   
   return (
     <CartIconContainer onClick={onClick}>
       <ShoppingIcon/>
-        <ItemCount>{totalItems}</ItemCount>
+        <ItemCount>{cart.totalItems}</ItemCount>
     </CartIconContainer>
   )
 }

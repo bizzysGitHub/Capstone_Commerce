@@ -1,11 +1,12 @@
-import { useContext } from "react"
-import { CartContext } from "../../contexts/cart-contexts"
 import CheckoutItem from "../../components/checkout-item/checkout-item-component"
 import { CheckoutContainer, CheckoutHeader, HeaderBlock, Total } from './checkout.styles'
-
+import { useAppSelector } from "../../app/hooks/custom"
+import IStoreItems from "../../interfaces/storeItems"
+import CartState from "../../interfaces/cartItems"
 
 const Checkout = () => {
-    const { itemsInCart, totalPrice } = useContext(CartContext);
+    const cart = useAppSelector((state : { cartItems:CartState }) => state.cartItems)
+    const { itemsInCart, totalPrice }  = cart 
 
     return (
         <>
@@ -17,7 +18,7 @@ const Checkout = () => {
                     <HeaderBlock><span className="">Price</span></HeaderBlock>
                     <HeaderBlock><span className="">Remove</span></HeaderBlock>
                 </CheckoutHeader>
-                {itemsInCart.map(cartItem => (
+                {itemsInCart.map((cartItem: IStoreItems) => (
                     <CheckoutItem key={cartItem.id} item={cartItem} />
                 ))}
                 <Total>${totalPrice}</Total>
