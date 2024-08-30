@@ -1,9 +1,9 @@
-import React, { ReactNode, useContext } from 'react'
+// import React, { ReactNode, useContext } from 'react'
 // import IStoreProducts from '../../interfaces/products'
 import IStoreItems from "../../interfaces/storeItems";
-import { CartContext } from '../../contexts/cart-contexts'
+// import { CartContext } from '../../contexts/cart-contexts'
 import { CheckoutItemContainer, ImageContainer, Name, Quantity, Price, Arrow, Value, RemoveButton } from './checkout-item.styles'
-import { useAppDispatch, useAppSelector } from '../../app/hooks/custom';
+import { useAppDispatch } from '../../app/hooks/custom';
 import { addItemToCart, removeItemFromCart, zeroOutItem } from '../../features/cart-items/cartItemSlice'
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
 const CheckoutItem = ({ item }: Props) => {
     const { id, name, imageUrl, price, quantity = 0 } = item;
     // const { clearItemFromCart } = useContext(CartContext);
-    const cart = useAppSelector(state => state.cartItems)
+    // const cart = useAppSelector(state => state.cartItems)
     const dispatch = useAppDispatch()
 
     // const clearItemHandler = () => zeroOutItem(item)

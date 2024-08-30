@@ -3,6 +3,8 @@ import { handleNewUserWithEmailPassword } from '../../../utils/firebase/firebase
 import { FormInput } from '../../../components/form-input/form-input.component';
 import Button from '../../../components/button/button.component';
 import {SignUpContainer, Heading2} from '../log-in-page.styles'
+import { useAppDispatch, } from '../../../app/hooks/custom';
+import { updateUserDataFromSignUp } from '../../../features/user-information/usersSlice' 
 
 
 
@@ -26,6 +28,7 @@ const SignUpForm = () => {
     const [formValues, SetFormValues] = useState<FormInfo>(defaultValues);
 
     const { displayName, email, password, confirmPassword, } = formValues;
+    const dispatch = useAppDispatch()
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -35,17 +38,20 @@ const SignUpForm = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (password !== confirmPassword) {
-            alert("passwords do not match")
+            alert('passwords do not match')
             SetFormValues({ ...formValues, ['password']: '', ['confirmPassword']: '' })
             return;
         }
         try {
-
-            await handleNewUserWithEmailPassword(email, password, { displayName });
+            
+            const userInfo = await handleNewUserWithEmailPassword(email, password, { displayName });
+            dispatch(updateUserDataFromSignUp(userInfo))
             SetFormValues(defaultValues);
 
-        } catch (error: any) {
-            error.code === 'auth/email-already-in-use' ? alert("uh-oh user already in use :(") : alert(error);
+        } catch (error) {
+            console.log(error);
+            throw new Error("uh-ou email may be in use arleady")
+            // error.code === 'auth/email-already-in-use' ? alert("uh-oh user already in use :(") : alert(error);
         }
 
     }

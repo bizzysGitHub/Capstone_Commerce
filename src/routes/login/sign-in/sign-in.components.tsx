@@ -1,71 +1,38 @@
-import { ChangeEvent, FormEvent, useContext, useState } from 'react'
-import { loginWithGooglePopup, signUserInWithEmailAndPassword } from '../../../utils/firebase/firebase'
+import { ChangeEvent, FormEvent } from 'react'
 import Button from '../../../components/button/button.component'
 import { FormInput } from '../../../components/form-input/form-input.component'
-import { UserContext } from '../../../contexts/users-contexts'
-import {SignUpContainer} from '../log-in-page.styles'
+import { SignUpContainer } from '../log-in-page.styles'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks/custom'
+import { clearLoginForm, loginWithEmailAndPassword, loginWithGoogle, userLoginInputChange } from '../../../features/user-information/usersSlice'
 
-
-// type signInProps = { 
-//     children:ReactNode
-// }
-
-
-interface FormInfo {
-    email: string,
-    password: string,
-}
-
-const defaultValues = {
-    email: "",
-    password: "",
-}
 
 
 const SignIn = () => {
-    const { setUserData } = useContext(UserContext)
 
+    const userInfo = useAppSelector((state) => state.users);
+    const dispatch = useAppDispatch();
 
-    const [formValues, SetFormValues] = useState<FormInfo>(defaultValues);
-
-    const { email, password } = formValues;
-
+    const { email, password } = userInfo
+   
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        try {
-            const userInfoFromFirebase = await signUserInWithEmailAndPassword(email, password);
 
-            if (userInfoFromFirebase) {
-                setUserData(userInfoFromFirebase)
-            }
-            SetFormValues(defaultValues);
-
-        } catch (error: any) {
-            error.code === 'auth/email-already-in-use'
-                ? alert("uh-oh user already in use :(")
-                : alert(error);
-        }
+        await dispatch(loginWithEmailAndPassword(userInfo))
+        dispatch(clearLoginForm())
     }
 
     const googleLogin = async () => {
 
-        try {
-            const userInfoFromFirebase = await loginWithGooglePopup()
-            if (userInfoFromFirebase) {
-                setUserData(userInfoFromFirebase)
-            }
-        } catch (error: unknown) {
-            //     error.code === 'auth/email-already-in-use' 
-            //     ? alert("uh-oh user already in use :(") 
-            alert(error);
-        }
+        await dispatch(loginWithGoogle())
+        dispatch(clearLoginForm())
+
     }
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 
         const { name, value } = e.target;
 
-        SetFormValues({ ...formValues, [name]: value })
+        dispatch(userLoginInputChange({ id: name, value }))
 
 
     }

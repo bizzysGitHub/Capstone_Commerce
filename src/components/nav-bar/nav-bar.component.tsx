@@ -1,4 +1,3 @@
-import React, { useContext, useState } from 'react'
 import { Outlet, Link } from 'react-router-dom'
 import CrownLogo from '../../assets/crown.svg'
 import {
@@ -8,23 +7,22 @@ import {
   NavLink
 } from './navigation.styles'
 
-import { UserContext } from '../../contexts/users-contexts'
-import { signOutUser } from '../../utils/firebase/firebase'
 import CartIcon from '../cart-icon-container/cart-icon-component'
 import CartDropdown from '../../components/cart-dropdown/cart-dropdown-component'
 import { showDropdown } from '../../features/cart-items/cartItemSlice'
 import { useAppSelector, useAppDispatch } from '../../app/hooks/custom'
-import CartState from '../../interfaces/cartItems'
+import { RootState } from '../../app/store'
+import { _signOutUser } from '../../features/user-information/usersSlice'
 
 
 
 export default function Navbar() {
-  const { userData } = useContext(UserContext)
-  const cart = useAppSelector((state: {cartItems : CartState}) => state.cartItems)
+  const cart = useAppSelector((state: RootState) => state.cartItems)
+  const userData = useAppSelector((state :RootState) => state.users.userDataFromFirebase)
   const dispatch = useAppDispatch()
 
   const handleSignOut = async () => {
-    await signOutUser()
+    await dispatch(_signOutUser())
   }
   const handleDropdown = () => {
     dispatch(showDropdown())
