@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-// import IStoreProducts from "../../interfaces/products";
 import { getCategoriesAndDocs } from "../../utils/firebase/firebase";
 import { FirebaseError } from "firebase/app";
 

@@ -8,8 +8,17 @@ import { updateUserDataFromSignUp } from '../../../features/user-information/use
 
 
 
+/**
+ * AS of Sep 3 im keeping this useEffect here for the displayname and the confirmPassword
+ * I think once i update how this form works with react-form-hooks, I'll be able to check
+ * validation of the passwords with zod and not need to keep state in this component. 
+ * The email and the password are already in the userSlice, along with the returned data from firebase
+ * 
+ * Revisions will come soon
+ */
 
-interface FormInfo {
+
+type FormInfo = {
     displayName: string,
     email: string,
     password: string,
@@ -50,7 +59,7 @@ const SignUpForm = () => {
 
         } catch (error) {
             console.log(error);
-            throw new Error("uh-ou email may be in use arleady")
+            throw new Error("uh-ou email may be in use already")
             // error.code === 'auth/email-already-in-use' ? alert("uh-oh user already in use :(") : alert(error);
         }
 

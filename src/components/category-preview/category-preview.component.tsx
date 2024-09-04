@@ -2,15 +2,10 @@
 import  { ReactNode } from 'react';
 import IStoreItems from '../../interfaces/storeItems';
 import ProductCard from '../product-card/product-card-component';
-// import { CategoriesContext } from '../../contexts/categories-contexts';
-// import IStoreProducts from '../../interfaces/products';
 import { CategoryPreviewContainer, Title, Preview } from './category-preview.styles'
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/custom';
-// import { getCategories } from '../../features/categories/categorySlice'; 
-
-
-
+ 
 
 const SectionItemsPreview = (products: IStoreItems[]): ReactNode[] => {
 

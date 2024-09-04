@@ -45,6 +45,16 @@ export const loginWithGoogle = createAsyncThunk('users/loginWithGoogle', async (
 
   try {
     const userData = await loginWithGooglePopup();
+    console.log(userData);
+    /**
+     * okay so redux doesn't like items returned from api class that aren't easily serialized.. 
+     * so returning the who document is giving me this weird error that says "A non-serializable value was detected in an action, in the path: `payload.createdAt`. Value"
+     * 
+     * At the moment i don't think i need the whole document. In all actuality i dont think i need any of it in redux since firebase has all the info
+     * and I havent advanced the app yet to save the cart if the user refreshes or signs out. So the next step is to persist the memory after we fix
+     * 1) the form asking user to fill in the email and password when logging in through google
+     * 2) updating the redux store with the user info on login. 
+     */
     return userData;
   } catch (error) {
     console.log(error);

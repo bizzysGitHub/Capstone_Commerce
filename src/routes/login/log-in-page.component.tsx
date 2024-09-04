@@ -7,15 +7,6 @@ import { LoginPageContainer} from './log-in-page.styles'
 
 const SignInPage = () => {
 
-// const tempStyle : CSSProperties = {
-//    display:'flex',
-//     flexDirection:'row',
-//     alignContent:'center',
-//     justifyContent:'space-around',
-//     margin: '30px auto',
-//     width: '900px'
-// }
-
   return (
     <LoginPageContainer>
     <SignIn />

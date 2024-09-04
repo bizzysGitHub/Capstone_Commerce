@@ -15,14 +15,13 @@ const SignIn = () => {
     const { email, password } = userInfo
    
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-
+        e.preventDefault();
+        
         await dispatch(loginWithEmailAndPassword(userInfo))
         dispatch(clearLoginForm())
     }
 
     const googleLogin = async () => {
-
         await dispatch(loginWithGoogle())
         dispatch(clearLoginForm())
 
