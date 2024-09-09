@@ -6,7 +6,7 @@ import { loginWithGooglePopup, signOutUser, signUserInWithEmailAndPassword } fro
 interface UserInfo {
   email: string,
   password: string,
-  userDataFromFirebase: DocumentData | null,
+  userDataFromFirebase: DocumentData | string |null,
   isError: boolean,
   isLoading: boolean,
 
@@ -29,7 +29,14 @@ const initialState: UserInfo = {
 export const loginWithEmailAndPassword = createAsyncThunk('users/loginWithEmail', async (userStateInfo: UserInfo, thunkAPI) => {
   try {
     const userData = await signUserInWithEmailAndPassword(userStateInfo.email, userStateInfo.password)
-    return userData
+    
+    // JSON.stringify(userData)
+    /**
+     * to get rid of the non-serialzable data error return JSON.stringify(userData)
+     * in the future change the dataType of  userDataFromFirebase to a string 
+     */
+    // return userData
+    return JSON.stringify(userData)
   }
   catch (error) {
     console.log(error)
@@ -45,17 +52,14 @@ export const loginWithGoogle = createAsyncThunk('users/loginWithGoogle', async (
 
   try {
     const userData = await loginWithGooglePopup();
-    console.log(userData);
-    /**
-     * okay so redux doesn't like items returned from api class that aren't easily serialized.. 
-     * so returning the who document is giving me this weird error that says "A non-serializable value was detected in an action, in the path: `payload.createdAt`. Value"
-     * 
-     * At the moment i don't think i need the whole document. In all actuality i dont think i need any of it in redux since firebase has all the info
-     * and I havent advanced the app yet to save the cart if the user refreshes or signs out. So the next step is to persist the memory after we fix
+    
+    /** 
+     *  So the next step is to persist the memory after we fix
      * 1) the form asking user to fill in the email and password when logging in through google
      * 2) updating the redux store with the user info on login. 
      */
-    return userData;
+    // return userData;
+    return JSON.stringify(userData);
   } catch (error) {
     console.log(error);
     return thunkAPI.rejectWithValue(error)
@@ -103,7 +107,7 @@ const usersSlice = createSlice({
       .addCase(loginWithEmailAndPassword.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
-        state.userDataFromFirebase = action.payload
+        state.userDataFromFirebase = JSON.parse(action.payload)
       })
       .addCase(loginWithEmailAndPassword.rejected, (state) => {
         state.isLoading = false;
@@ -115,7 +119,7 @@ const usersSlice = createSlice({
       .addCase(loginWithGoogle.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
-        state.userDataFromFirebase = action.payload
+        state.userDataFromFirebase = JSON.parse(action.payload)
       })
       .addCase(loginWithGoogle.rejected, (state) => {
         state.isLoading = false;

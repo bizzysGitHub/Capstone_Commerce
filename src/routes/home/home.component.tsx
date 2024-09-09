@@ -3,7 +3,6 @@ import { categories } from '../../home-categories'
 import Directory from '../../components/directory-container/directory-container.component';
 import DirectoryItem from '../../components/directory-item/directory-item.component';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/custom'
-import { getCategories } from '../../features/categories/categorySlice'
 
 
 export default function Home() {
@@ -21,14 +20,7 @@ export default function Home() {
   ]
 
 
-  useEffect(() => {
-    const bringItTogether = async () => {
-      await dispatch(getCategories()).unwrap()
-    };
-
-
-    bringItTogether()
-  }, [dispatch])
+  // useEffect(() => {}, [])
 
 
   const sortedGroupsForTheHomePage = Object.keys(categoriesMap).map((item, id) => {
@@ -38,8 +30,6 @@ export default function Home() {
       imageUrl: groupImagesThatNeedToBeUplaodedToFirebase[id]
     }
   })
-
-  // console.log(sortedGroupsForTheHomePage);
 
 
   return (

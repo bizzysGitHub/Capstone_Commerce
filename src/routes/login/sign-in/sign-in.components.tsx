@@ -4,6 +4,7 @@ import { FormInput } from '../../../components/form-input/form-input.component'
 import { SignUpContainer } from '../log-in-page.styles'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/custom'
 import { clearLoginForm, loginWithEmailAndPassword, loginWithGoogle, userLoginInputChange } from '../../../features/user-information/usersSlice'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -11,6 +12,7 @@ const SignIn = () => {
 
     const userInfo = useAppSelector((state) => state.users);
     const dispatch = useAppDispatch();
+    const navigate = useNavigate()
 
     const { email, password } = userInfo
    
@@ -19,10 +21,12 @@ const SignIn = () => {
         
         await dispatch(loginWithEmailAndPassword(userInfo))
         dispatch(clearLoginForm())
+        navigate('/')
     }
 
     const googleLogin = async () => {
         await dispatch(loginWithGoogle())
+        navigate('/')
         dispatch(clearLoginForm())
 
     }

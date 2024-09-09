@@ -1,31 +1,62 @@
 // import { useState } from 'react'
 import Navbar from './components/nav-bar/nav-bar.component'
 import './index.scss'
-import { UserProvider } from './contexts/users-contexts'
-import { CategoriesProvider } from './contexts/categories-contexts'
 import { useEffect } from 'react'
-import {  useAppDispatch } from './app/hooks/custom'
+import { useAppDispatch, useAppSelector } from './app/hooks/custom'
 import { getCategories } from './features/categories/categorySlice'
 
-function App() {
-  const dispatch = useAppDispatch()
-  
-  useEffect(() => {
-    // setCategory(allProducts)
-    const loadingShouldBeDifferent = async () => {
-      await dispatch(getCategories()).unwrap()
-    }
-    loadingShouldBeDifferent()
+import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom'
+import ErrorPage from './error-page.tsx'
+import SignInPage from './routes/login/log-in-page.component.tsx'
+import Home from './routes/home/home.component.tsx'
+import Shop from './routes/shop/shop.component.tsx'
+import Checkout from './routes/checkout/checkout-component.tsx'
+import Categories from './components/category/category.component.js'
 
-  }, [dispatch])
+function App() {
+  const dispatch = useAppDispatch();
+
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      errorElement: <ErrorPage />,  
+      element:<Navbar/>,
+      loader: async () => {
+      return   await dispatch(getCategories()).unwrap()
+      },
+      children: [
+        {
+          path: '/',
+          element: <Home /> 
+
+        },
+        {
+          path: 'shop',
+          element: <Shop />,
+
+        },
+        {
+          path: 'shop/:product',
+          element: <Categories />
+        },
+        {
+          path: '/sign-in',
+          element: <SignInPage />
+        },
+        {
+          path: '/checkout',
+          element: <Checkout />
+        }
+      ]
+
+    }
+
+  ])
 
   return (
     <>
-      <UserProvider>
-        <CategoriesProvider>
-            <Navbar />
-        </CategoriesProvider>
-      </UserProvider>
+      <RouterProvider router={router} />
+
     </>
 
   )
