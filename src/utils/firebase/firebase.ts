@@ -72,12 +72,12 @@ export const addCollectionsAndDocuments = async (collectionKey: string, objectTo
 export const getCategoriesAndDocs = async () => {
   const querySnapshot = await getDocs(collection(db, "categories"));
   const categoryMap = querySnapshot.docs.reduce((acc: any, docSnapshot) => {
-    const { items, title } = docSnapshot.data();
+    const { items, title, image } = docSnapshot.data();
     //make first letter capitalized
-    acc[title.toLowerCase()] = items;
+    acc[title] = {items:items, img: image}
     return acc
   }, {})
-
+  
   return categoryMap
 }
 
