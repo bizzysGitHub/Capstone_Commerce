@@ -9,9 +9,9 @@ import {
 
 import CartIcon from '../cart-icon-container/cart-icon-component'
 import CartDropdown from '../../components/cart-dropdown/cart-dropdown-component'
-import { showDropdown } from '../../features/cart-items/cartItemSlice'
+import { showDropdown, emptyCart } from '../../features/cart-items/cartItemSlice'
 import { useAppSelector, useAppDispatch } from '../../app/hooks/custom'
-import { RootState } from '../../app/store'
+import { RootState } from '../../redux/store'
 import { _signOutUser } from '../../features/user-information/usersSlice'
 
 
@@ -23,6 +23,7 @@ export default function Navbar() {
 
   const handleSignOut = async () => {
     await dispatch(_signOutUser())
+    dispatch(emptyCart())
   }
   const handleDropdown = () => {
     dispatch(showDropdown())

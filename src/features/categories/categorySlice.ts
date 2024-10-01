@@ -35,7 +35,8 @@ export const getCategories = createAsyncThunk('categories/retrieve', async (_, t
             obj2[key] = img
         }
         dataArray.push(obj1, obj2)
-
+        console.log(dataArray);
+        
         return dataArray
     } catch (error: unknown) {
 

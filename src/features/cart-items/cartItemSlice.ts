@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import IStoreItems from '../../interfaces/storeItems'
-import { RootState } from "../../app/store";
+import { RootState } from "../../redux/store";
 import CartState from "../../interfaces/cartItems";
 
 
@@ -93,13 +93,14 @@ export const cartItemSlice = createSlice({
     addItemToCart: (state, action: PayloadAction<IStoreItems>) => { increaseCartItem(state, action.payload) },
     removeItemFromCart: (state, action: PayloadAction<IStoreItems>) => { decreaseCartItem(state, action.payload) },
     showDropdown: (state) => { state.showDropdown = !state.showDropdown },
-    zeroOutItem: (state, action: PayloadAction<IStoreItems>) => { clearItemFromCart(state, action.payload) }
+    zeroOutItem: (state, action: PayloadAction<IStoreItems>) => { clearItemFromCart(state, action.payload) },
+    emptyCart :  (state) => { return  initialState}
 
   }
 
 });
 
 
-export const { addItemToCart, removeItemFromCart, showDropdown, zeroOutItem } = cartItemSlice.actions;
+export const { addItemToCart, removeItemFromCart, showDropdown, zeroOutItem, emptyCart } = cartItemSlice.actions;
 export const selectCart = (state: RootState) => state.cartItems
 export default cartItemSlice.reducer

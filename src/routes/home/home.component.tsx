@@ -3,37 +3,42 @@ import DirectoryItem from '../../components/directory-item/directory-item.compon
 import { useAppSelector } from '../../app/hooks/custom'
 
 
-export default function Home() {
 
+
+
+
+export default function Home() {
+  
   const categoryData = useAppSelector((state) => state.categories);
+  // const categoryData  = useLoaderData() 
   const { isLoading, categoriesGroupImage } = categoryData;
 
-
-  const sortedGroupsForTheHomePage = Object.keys(categoriesGroupImage).map((item, id) => {
+  const groupSortedHomePage = Object.keys(categoriesGroupImage).map((item, id) => {
     return {
       id: id + 1,
       title: item,
       imageUrl: categoriesGroupImage[item as keyof typeof categoriesGroupImage]
     }
   })
+  const DirectoryList  = () : JSX.Element[] => {
 
+    if( isLoading ){
+
+      return  [<h2> Loading</h2>]
+    }
+  
+    return groupSortedHomePage.map((category) => (
+      <DirectoryItem key={category.id} category={category} />
+    ))
+  }
 
   return (
     <Directory>
-      {
-        isLoading ? <>
-          <h2> one sec bizz we loading </h2>
-        </> :
           <>
             {
-              sortedGroupsForTheHomePage.map((category) => (
-                <DirectoryItem key={category.id} category={category} />
-              ))
-
+              <DirectoryList />
             }
           </>
-
-      }
     </Directory>
   )
 }

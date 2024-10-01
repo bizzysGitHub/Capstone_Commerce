@@ -13,14 +13,7 @@ type Props = {
 
 const CheckoutItem = ({ item }: Props) => {
     const { id, name, imageUrl, price, quantity = 0 } = item;
-    // const { clearItemFromCart } = useContext(CartContext);
-    // const cart = useAppSelector(state => state.cartItems)
     const dispatch = useAppDispatch()
-
-    // const clearItemHandler = () => zeroOutItem(item)
-    // const addItemHandler = () => addItemToCart(item)
-    // const removeItemHandler = () => removeItemFromCart(item)
-
 
     return (
         <CheckoutItemContainer key={id}>

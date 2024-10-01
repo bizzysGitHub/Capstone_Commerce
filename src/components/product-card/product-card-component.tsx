@@ -1,7 +1,4 @@
 
-// import Button from "../button/button.component"
-// import { useContext, useState } from "react"
-// import { CartContext } from "../../contexts/cart-contexts"
 import IStoreItems from "../../interfaces/storeItems"
 import {ProductCardContainer,
   ProductImage,
@@ -10,7 +7,6 @@ import {ProductCardContainer,
   ProductName,
   ProductPrice} from './product-card.styles'
 import { useAppDispatch } from "../../app/hooks/custom"
-// import { RootState } from '../../app/store'
 import { addItemToCart } from "../../features/cart-items/cartItemSlice"
 
 type Props = {
@@ -20,8 +16,6 @@ type Props = {
 
 
 const ProductCard = ({product}:Props) => {
-  // const { addItemToCart } = useContext(CartContext);
-  // const cart = useAppSelector((state :RootState) => state.cartItems)
     const dispatch = useAppDispatch();
   const {name, price, imageUrl, id} = product;
 

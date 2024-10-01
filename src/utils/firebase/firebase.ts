@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FirebaseError, initializeApp } from 'firebase/app';
 import {
   getAuth,
@@ -19,9 +20,9 @@ import {
   DocumentReference,
   DocumentData,
   DocumentSnapshot,
-  CollectionReference,
   writeBatch,
-  getDocs} from "firebase/firestore";
+  getDocs,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDNVfLUQ7TYhfBko1L2mZ_78ibf1oaUePs',
@@ -46,38 +47,55 @@ provider.setCustomParameters({
   prompt: 'select_account'
 });
 
-export const addCollectionsAndDocuments = async (collectionKey: string, objectToAdd: any) => {
-  const collectionRef: CollectionReference<DocumentData>
-    = collection(db, collectionKey);
+/**
+ * 
+ * @param collectionKey  the key you want to make the changes to
+ * @param objectToAdd  the object and the type you want to add as a field in the document
+ *  this function definitely shouldnt be available to to the public.. Also need to add those config strings to an env file
+ */
+export const addFieldsAndDocuments = async (collectionKey: string, objectToAdd: any) => {
+
+  const collectionRef = collection(db, collectionKey);
+  const querySnapshot = await getDocs(collectionRef);
   const batch = writeBatch(db);
 
-  objectToAdd.forEach((object: any) => {
-    const docRef = doc(collectionRef, object.title.toLowerCase());
-    batch.set(docRef, object);
+  querySnapshot.docs.forEach((_collection) => {
+    const docRef = doc(collectionRef, _collection.id);
+    batch.update(docRef, objectToAdd);
   });
+
   await batch.commit();
+
 };
 
-// export const getAllDocumentsFromCategories = async () => {
-//   const querySnapshot = await getDocs(collection(db, "categories"));
-//   const caterMap = querySnapshot.docs.reduce((acc: any , docSnapshot)=> {
-//     const { title, items } = docSnapshot.data();
-//       acc[title.toLowerCase()] = items;
-//   }, {})
+/**
+ * had to remove this function when i needed to add a group image to the db so the homepage
+ * could pull images from firebase instead of locally 
+ * 
+ * 
+ * export const getAllDocumentsFromCategories = async () => {
+  const querySnapshot = await getDocs(collection(db, "categories"));
+  const caterMap = querySnapshot.docs.reduce((acc: any , docSnapshot)=> {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+  }, {})
+  
+  console.log(caterMap)
+  
+}
 
-//   console.log(caterMap)
+*/
 
-// }
 
 export const getCategoriesAndDocs = async () => {
   const querySnapshot = await getDocs(collection(db, "categories"));
   const categoryMap = querySnapshot.docs.reduce((acc: any, docSnapshot) => {
     const { items, title, image } = docSnapshot.data();
     //make first letter capitalized
-    acc[title] = {items:items, img: image}
+    acc[title] = { items, img: image }
     return acc
   }, {})
-  
+
   return categoryMap
 }
 
@@ -144,7 +162,7 @@ export const signUserInWithEmailAndPassword = async (email: string, password: st
   if (!email || !password) {
     alert("Uh-oh either your email or password is missing :( ")
     throw new Error("Must enter email and password")
-    
+
   }
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password)
@@ -155,14 +173,14 @@ export const signUserInWithEmailAndPassword = async (email: string, password: st
   } catch (error) {
     if (error instanceof FirebaseError) {
       const cleanedUpErrorCode = (error.code.match(/auth\/(.+)/) as Array<string>)
-        alert(cleanedUpErrorCode[1])
-        throw new Error(cleanedUpErrorCode[1]);
-        
+      alert(cleanedUpErrorCode[1])
+      throw new Error(cleanedUpErrorCode[1]);
+
     }
     console.log(error);
-    
+
     throw new Error("Something went wrong. Please try again")
-    
+
   }
 
 }
