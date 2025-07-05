@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import Button from '../button/button.component'
 import {CartItems, EmptyMessage, CartDropdownContainer} from'./cart-dropdown.styles'
 import CartItem from '../cart-item/cart-item-component';
-import {  useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/custom';
 import { showDropdown } from '../../features/cart-items/cartItemSlice'; 
 import CartState from '../../interfaces/cartItems';

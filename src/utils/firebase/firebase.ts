@@ -25,12 +25,12 @@ import {
 } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDNVfLUQ7TYhfBko1L2mZ_78ibf1oaUePs',
-  authDomain: 'crown-clowthing-db.firebaseapp.com',
-  projectId: 'crown-clowthing-db',
-  storageBucket: 'crown-clowthing-db.appspot.com',
-  messagingSenderId: '90809430808',
-  appId: '1:90809430808:web:ff7b9256c398d8e544a46d',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTHDOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -91,10 +91,10 @@ export const getCategoriesAndDocs = async () => {
   const querySnapshot = await getDocs(collection(db, "categories"));
   const categoryMap = querySnapshot.docs.reduce((acc: any, docSnapshot) => {
     const { items, title, image } = docSnapshot.data();
-    //make first letter capitalized
-    acc[title] = { items, img: image }
+    acc[title] = { img: image, items: items }
     return acc
   }, {})
+console.log(categoryMap);
 
   return categoryMap
 }

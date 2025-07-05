@@ -1,4 +1,4 @@
-import { Outlet, Link } from 'react-router-dom'
+import { Outlet, Link } from 'react-router'
 import CrownLogo from '../../assets/crown.svg'
 import {
   NavigationContainer,

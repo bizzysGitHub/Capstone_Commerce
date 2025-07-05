@@ -6,7 +6,7 @@ import {
   DirectoryBody,
   DirectoryLink
 } from './directory-item.styles.jsx';
-// import { Link } from 'react-router-dom'
+// import { Link } from 'react-router'
 
 type categoryProps = {
   category: {

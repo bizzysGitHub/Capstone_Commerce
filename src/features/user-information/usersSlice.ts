@@ -32,7 +32,7 @@ export const loginWithEmailAndPassword = createAsyncThunk('users/loginWithEmail'
     
     // JSON.stringify(userData)
     /**
-     * to get rid of the non-serialzable data error return JSON.stringify(userData)
+     * to get rid of the non-serializable data error return JSON.stringify(userData)
      * in the future change the dataType of  userDataFromFirebase to a string 
      */
     // return userData

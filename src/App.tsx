@@ -2,16 +2,17 @@
 import Navbar from './components/nav-bar/nav-bar.component'
 import './index.scss'
 import { useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from './app/hooks/custom'
+import { useAppDispatch } from './app/hooks/custom'
 import { getCategories } from './features/categories/categorySlice'
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import ErrorPage from './error-page.tsx'
+import { createBrowserRouter, RouterProvider } from 'react-router'
+import ErrorPage from './ui/error-page.tsx'
 import SignInPage from './routes/login/log-in-page.component.tsx'
 import Home from './routes/home/home.component.tsx'
 import Shop from './routes/shop/shop.component.tsx'
 import Checkout from './routes/checkout/checkout-component.tsx'
 import Categories from './components/category/category.component.js'
+import Fallback from './ui/fall-back.tsx'
 // import { addFieldsAndDocuments } from '../src/utils/firebase/firebase.ts
 
 
@@ -23,7 +24,7 @@ function App() {
 
   // const categoryLoader = async () => {
   //   const { categoriesMap } = data;    
-    
+
   //   if (Object.keys(categoriesMap).length === 0) {
   //     return await dispatch(getCategories()).unwrap()
   //   }
@@ -32,20 +33,21 @@ function App() {
 
 
   useEffect(() => {
-    const categoryLoader = async () => { 
-     await dispatch(getCategories()).unwrap()
+    const categoryLoader = async () => {
+      await dispatch(getCategories()).unwrap()
     };
 
     categoryLoader()
-    
+
   }, [dispatch])
-  
+
 
   const router = createBrowserRouter([
     {
       path: '/',
       errorElement: <ErrorPage />,
       element: <Navbar />,
+      hydrateFallbackElement: <Fallback />,
       children: [
         {
           path: '/',
@@ -71,13 +73,15 @@ function App() {
         }
       ]
 
-    }
+    },
 
   ])
 
   return (
     <>
-      <RouterProvider router={router} />
+      <RouterProvider
+        router={router}
+        />
 
     </>
 

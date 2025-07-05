@@ -3,7 +3,7 @@ import  { ReactNode } from 'react';
 import IStoreItems from '../../interfaces/storeItems';
 import ProductCard from '../product-card/product-card-component';
 import { CategoryPreviewContainer, Title, Preview } from './category-preview.styles'
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useAppSelector } from '../../app/hooks/custom';
  
 

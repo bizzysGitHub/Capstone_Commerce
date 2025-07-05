@@ -4,7 +4,7 @@ import { FormInput } from '../../../components/form-input/form-input.component'
 import { SignUpContainer } from '../log-in-page.styles'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/custom'
 import { clearLoginForm, loginWithEmailAndPassword, loginWithGoogle, userLoginInputChange } from '../../../features/user-information/usersSlice'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 
 
