@@ -1,53 +1,37 @@
-
-import  { ReactNode } from 'react';
+import { ReactElement, useMemo } from 'react';
 import IStoreItems from '../../interfaces/storeItems';
 import ProductCard from '../product-card/product-card-component';
 import { CategoryPreviewContainer, Title, Preview } from './category-preview.styles'
 import { Link } from 'react-router';
 import { useAppSelector } from '../../app/hooks/custom';
- 
+import { CategoryData, CategoryMap } from '@/utils/types';
 
-const SectionItemsPreview = (products: IStoreItems[]): ReactNode[] => {
-
-    const previewItemsArray = products.reduce((acc: ReactNode[], items: IStoreItems) => {
-        acc.length < 4
-            ? acc.push(<ProductCard key={items.id} product={items} />)
-            : acc
-        return acc
-    }, [])
-    return previewItemsArray
-}
+const SectionItemsPreview = (products: IStoreItems[]): ReactElement[] =>
+    products.slice(0, 4).map((product) => (
+        <ProductCard key={product.id} product={product} />
+    ));
 
 const CategoryPreview = () => {
     const categoryData = useAppSelector((state) => state.categories);
     const { categoriesMap } = categoryData;
-    
-    return (
+        return (
         <>
             {
-                Object.keys(categoriesMap).map((title: string, id: number) => {
+                categoriesMap.map((productObject: CategoryMap, id: number) => {
+                    const [title, data] = Object.entries(productObject)[0];
+
                     return (
                         <CategoryPreviewContainer key={id}>
-                            <div>
-                                <h2>
-                                    <Link to={title}>
-                                        <Title>
-                                            {title}
-                                        </Title>
-                                    </Link>
-                                </h2>
-                                <Preview>
-                                    {
-                                        SectionItemsPreview(categoriesMap[title as keyof typeof categoriesMap])
-                                    }
-                                </Preview>
-                            </div>
+                            <h2>
+                                <Link to={title}>
+                                    <Title>{title}</Title>
+                                </Link>
+                            </h2>
+                            <Preview>{SectionItemsPreview(data.items)}</Preview>
                         </CategoryPreviewContainer>
-                    )
+                    );
                 })
-
             }
-
         </>
     )
 }

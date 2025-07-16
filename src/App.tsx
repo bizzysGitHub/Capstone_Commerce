@@ -20,16 +20,6 @@ import Fallback from './ui/fall-back.tsx'
 
 function App() {
   const dispatch = useAppDispatch();
-  // const data = useAppSelector((state) => state.categories);
-
-  // const categoryLoader = async () => {
-  //   const { categoriesMap } = data;    
-
-  //   if (Object.keys(categoriesMap).length === 0) {
-  //     return await dispatch(getCategories()).unwrap()
-  //   }
-  //   return null
-  // }
 
 
   useEffect(() => {

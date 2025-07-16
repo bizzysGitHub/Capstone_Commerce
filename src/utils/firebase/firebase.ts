@@ -23,6 +23,7 @@ import {
   writeBatch,
   getDocs,
 } from "firebase/firestore";
+import { CategoryItem } from '../types';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -47,19 +48,21 @@ provider.setCustomParameters({
   prompt: 'select_account'
 });
 
+
+
 /**
  * 
  * @param collectionKey  the key you want to make the changes to
  * @param objectToAdd  the object and the type you want to add as a field in the document
- *  this function definitely shouldnt be available to to the public.. Also need to add those config strings to an env file
+ *  this function definitely shouldn't be available to to the public.. Also need to add those config strings to an env file
  */
 export const addFieldsAndDocuments = async (collectionKey: string, objectToAdd: any) => {
 
   const collectionRef = collection(db, collectionKey);
-  const querySnapshot = await getDocs(collectionRef);
+  const snapshot = await getDocs(collectionRef);
   const batch = writeBatch(db);
 
-  querySnapshot.docs.forEach((_collection) => {
+  snapshot.docs.forEach((_collection) => {
     const docRef = doc(collectionRef, _collection.id);
     batch.update(docRef, objectToAdd);
   });
@@ -68,35 +71,34 @@ export const addFieldsAndDocuments = async (collectionKey: string, objectToAdd: 
 
 };
 
-/**
- * had to remove this function when i needed to add a group image to the db so the homepage
- * could pull images from firebase instead of locally 
- * 
- * 
- * export const getAllDocumentsFromCategories = async () => {
-  const querySnapshot = await getDocs(collection(db, "categories"));
-  const caterMap = querySnapshot.docs.reduce((acc: any , docSnapshot)=> {
-    const { title, items } = docSnapshot.data();
-    acc[title.toLowerCase()] = items;
-  }, {})
-  
-  console.log(caterMap)
-  
-}
 
-*/
+export const getCategoriesAndDocs = async (): Promise<
+  { [key: string]: { previewImg: string; items: CategoryItem[] } }[]
+> => {
+  const snapshot = await getDocs(collection(db, "categories"));
 
+  const itemsDataArray = snapshot.docs.reduce(
+    (
+      acc: { [key: string]: { previewImg: string; items: CategoryItem[] } }[],
+      doc
+    ) => {
+      const { items, title, image } = doc.data();
+      const dataEntry = {
+        [title]: {
+          previewImg: image,
+          items: items
+        }
+      };
 
-export const getCategoriesAndDocs = async () => {
-  const querySnapshot = await getDocs(collection(db, "categories"));
-  const categoryMap = querySnapshot.docs.reduce((acc: any, docSnapshot) => {
-    const { items, title, image } = docSnapshot.data();
-    acc[title] = { img: image, items: items }
-    return acc
-  }, {})
-console.log(categoryMap);
+      // return [...acc, dataEntry];
+      return [...acc, dataEntry];
+    },
+    []
+  );
 
-  return categoryMap
+  console.log(itemsDataArray);
+
+  return itemsDataArray;
 }
 
 export const getDocFromUserAuth = async (userAuth: User, otherInformation: object = {}) => {

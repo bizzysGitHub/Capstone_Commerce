@@ -1,21 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getCategoriesAndDocs } from "../../utils/firebase/firebase";
 import { FirebaseError } from "firebase/app";
+import { Categories } from "@/utils/types/category";
 
 
-type Categories = {
-    categoriesMap: object,
-    categoriesGroupImage: object,
-    isError: boolean,
-    isSuccess: boolean,
-    isLoading: boolean,
-    message: string
 
-}
 
 const initialState: Categories = {
-    categoriesMap: {},
-    categoriesGroupImage: {},
+    categoriesMap: [],
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -24,20 +16,10 @@ const initialState: Categories = {
 
 export const getCategories = createAsyncThunk('categories/retrieve', async (_, thunkAPI) => {
     try {
-        const data = await getCategoriesAndDocs()
-        const dataArray: object[] = []
-        const obj1: { [key: string]: [] } = {}
-        const obj2: { [key: string]: string } = {}
+        const data = await getCategoriesAndDocs();
+        console.log(data);
 
-        for (const key in data) {
-            const { items, img } = data[key];
-            obj1[key] = items
-            obj2[key] = img
-        }
-        dataArray.push(obj1, obj2)
-        console.log(dataArray);
-        
-        return dataArray
+        return data;
     } catch (error: unknown) {
 
         //not sure about error message type
@@ -66,8 +48,7 @@ export const categorySlice = createSlice({
             })
             .addCase(getCategories.fulfilled, (state, action) => {
 
-                state.categoriesMap = action.payload[0]
-                state.categoriesGroupImage = action.payload[1]
+                state.categoriesMap = action.payload
                 state.isLoading = false,
                     state.isSuccess = true
             })
