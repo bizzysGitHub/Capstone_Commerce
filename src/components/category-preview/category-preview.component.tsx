@@ -1,12 +1,11 @@
 import { ReactElement, useMemo } from 'react';
-import IStoreItems from '../../interfaces/storeItems';
 import ProductCard from '../product-card/product-card-component';
 import { CategoryPreviewContainer, Title, Preview } from './category-preview.styles'
 import { Link } from 'react-router';
 import { useAppSelector } from '../../app/hooks/custom';
-import { CategoryData, CategoryMap } from '@/utils/types';
+import { CategoryData, CategoryItem, CategoryMap } from '@/utils/types';
 
-const SectionItemsPreview = (products: IStoreItems[]): ReactElement[] =>
+const SectionItemsPreview = (products: CategoryItem[]): ReactElement[] =>
     products.slice(0, 4).map((product) => (
         <ProductCard key={product.id} product={product} />
     ));

@@ -1,9 +1,9 @@
-import IStoreItems from "./storeItems";
+import CategoryItem from "./storeItems";
 
 
 
 export default interface CartState {
-    itemsInCart: IStoreItems[],
+    itemsInCart: CategoryItem[],
     totalItems: number,
     totalPrice: number,
     showDropdown: boolean

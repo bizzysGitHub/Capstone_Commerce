@@ -12,26 +12,28 @@ import { Suspense } from 'react';
 export default function Home() {
 
   const categoryData = useAppSelector((state) => state.categories);
-  // const categoryData  = useLoaderData() 
-  const { isLoading, categoriesGroupImage } = categoryData;
+  const { isLoading, categoriesMap } = categoryData;
 
-  const groupSortedHomePage = Object.keys(categoriesGroupImage).map((item, id) => {
+  const groupSortedHomePage = categoriesMap.map((item, index) => {
+    const itemName = Object.keys(item)[0]
     return {
-      id: id + 1,
-      title: item,
-      imageUrl: categoriesGroupImage[item as keyof typeof categoriesGroupImage]
+      id: index + 1,
+      title: itemName,
+      imageUrl: item[itemName].previewImg
     }
+
   })
+
   const DirectoryList = (): JSX.Element => {
     return <>
       {groupSortedHomePage.map((category) => (<DirectoryItem key={category.id} category={category} />))}
     </>
-  } 
+  }
 
   return (
-      <Directory>
-       {isLoading ? <Fallback/> : <DirectoryList />} 
-      </Directory>
+    <Directory>
+      {isLoading ? <Fallback /> : <DirectoryList />}
+    </Directory>
 
   )
 }

@@ -1,8 +1,8 @@
 import CheckoutItem from "../../components/checkout-item/checkout-item-component"
 import { CheckoutContainer, CheckoutHeader, HeaderBlock, Total } from './checkout.styles'
 import { useAppSelector } from "../../app/hooks/custom"
-import IStoreItems from "../../interfaces/storeItems"
 import CartState from "../../interfaces/cartItems"
+import { CategoryItem } from "@/utils/types"
 
 const Checkout = () => {
     const cart = useAppSelector((state : { cartItems:CartState }) => state.cartItems)
@@ -18,7 +18,7 @@ const Checkout = () => {
                     <HeaderBlock><span className="">Price</span></HeaderBlock>
                     <HeaderBlock><span className="">Remove</span></HeaderBlock>
                 </CheckoutHeader>
-                {itemsInCart.map((cartItem: IStoreItems) => (
+                {itemsInCart.map((cartItem: CategoryItem) => (
                     <CheckoutItem key={cartItem.id} item={cartItem} />
                 ))}
                 <Total>${totalPrice}</Total>

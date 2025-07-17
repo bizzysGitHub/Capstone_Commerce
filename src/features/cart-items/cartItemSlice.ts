@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import IStoreItems from '../../interfaces/storeItems'
 import { RootState } from "../../redux/store";
 import CartState from "../../interfaces/cartItems";
+import { CategoryItem } from "@/utils/types";
 
 
 
@@ -22,7 +22,7 @@ const initialState: CartState = {
 
 //helper functions
 
-const increaseCartItem = (state: CartState, addedCartItem: IStoreItems) => {
+const increaseCartItem = (state: CartState, addedCartItem: CategoryItem) => {
 
   //check if item is already in cart
 
@@ -54,7 +54,7 @@ const increaseCartItem = (state: CartState, addedCartItem: IStoreItems) => {
   state.totalPrice === 0 ? state.totalPrice = addedCartItem.price : state.totalPrice += addedCartItem.price
 
 }
-const decreaseCartItem = (state: CartState, itemToRemove: IStoreItems) => {
+const decreaseCartItem = (state: CartState, itemToRemove: CategoryItem) => {
 
   const duplicateInCart = state.itemsInCart.find((item) => item.id === itemToRemove.id)
 
@@ -78,7 +78,7 @@ const decreaseCartItem = (state: CartState, itemToRemove: IStoreItems) => {
 
 
 }
-const clearItemFromCart = (state: CartState, itemToClear: IStoreItems) => {
+const clearItemFromCart = (state: CartState, itemToClear: CategoryItem) => {
 
   state.itemsInCart = state.itemsInCart.filter(item => item.id !== itemToClear.id)
   state.totalPrice = state.totalPrice - (itemToClear.price * (itemToClear.quantity as number))
@@ -90,10 +90,10 @@ export const cartItemSlice = createSlice({
   name: 'cartItems',
   initialState,
   reducers: {
-    addItemToCart: (state, action: PayloadAction<IStoreItems>) => { increaseCartItem(state, action.payload) },
-    removeItemFromCart: (state, action: PayloadAction<IStoreItems>) => { decreaseCartItem(state, action.payload) },
+    addItemToCart: (state, action: PayloadAction<CategoryItem>) => { increaseCartItem(state, action.payload) },
+    removeItemFromCart: (state, action: PayloadAction<CategoryItem>) => { decreaseCartItem(state, action.payload) },
     showDropdown: (state) => { state.showDropdown = !state.showDropdown },
-    zeroOutItem: (state, action: PayloadAction<IStoreItems>) => { clearItemFromCart(state, action.payload) },
+    zeroOutItem: (state, action: PayloadAction<CategoryItem>) => { clearItemFromCart(state, action.payload) },
     emptyCart :  (state) => { return  initialState}
 
   }

@@ -1,5 +1,4 @@
 
-import IStoreItems from "../../interfaces/storeItems"
 import {ProductCardContainer,
   ProductImage,
   AddToCartButton,
@@ -8,9 +7,10 @@ import {ProductCardContainer,
   ProductPrice} from './product-card.styles'
 import { useAppDispatch } from "../../app/hooks/custom"
 import { addItemToCart } from "../../features/cart-items/cartItemSlice"
+import { CategoryItem } from "@/utils/types"
 
 type Props = {
-    product: IStoreItems
+    product: CategoryItem
 }
 
 

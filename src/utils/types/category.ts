@@ -1,9 +1,9 @@
 export type CategoryItem = {
-    name: string,
-    imageUrl: string,
-    price: number,
-    id: number,
-    quantity?:number
+    id: number;
+    name: string;
+    imageUrl: string;
+    price: number;
+    quantity?: number;
 
 };
 export type CategoryData = {
@@ -24,6 +24,14 @@ export type Categories = {
 
 }
 
-export type FormattedCatMap = {
-    name: CategoryMap
-}
+export type CartState = {
+    itemsInCart: CategoryItem[];
+    totalItems: number;
+    totalPrice: number;
+    showDropdown: boolean;
+};
+
+export type IStoreProducts = {
+    title: string;
+    items: CategoryItem[];
+};

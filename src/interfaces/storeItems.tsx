@@ -1,6 +1,6 @@
 
 
-export default interface IStoreItems {
+export default interface CategoryItem {
 
     "id": number,
     "name": string,

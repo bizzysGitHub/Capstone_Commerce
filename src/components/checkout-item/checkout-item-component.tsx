@@ -1,14 +1,11 @@
-// import React, { ReactNode, useContext } from 'react'
-// import IStoreProducts from '../../interfaces/products'
-import IStoreItems from "../../interfaces/storeItems";
-// import { CartContext } from '../../contexts/cart-contexts'
 import { CheckoutItemContainer, ImageContainer, Name, Quantity, Price, Arrow, Value, RemoveButton } from './checkout-item.styles'
 import { useAppDispatch } from '../../app/hooks/custom';
 import { addItemToCart, removeItemFromCart, zeroOutItem } from '../../features/cart-items/cartItemSlice'
+import { CategoryItem } from "@/utils/types";
 
 type Props = {
 
-    item: IStoreItems
+    item: CategoryItem
 }
 
 const CheckoutItem = ({ item }: Props) => {
