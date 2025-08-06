@@ -9,6 +9,7 @@ interface UserInfo {
   userDataFromFirebase: DocumentData | string |null,
   isError: boolean,
   isLoading: boolean,
+  darkMode: boolean
 
 }
 
@@ -22,6 +23,7 @@ const initialState: UserInfo = {
   userDataFromFirebase: null,
   isError: false,
   isLoading: false,
+  darkMode: false
 
 
 };
@@ -97,6 +99,9 @@ const usersSlice = createSlice({
       state.email = ""
       state.password = ""
     },
+    setDarkModeOn : (state) => {
+      state.darkMode = !state.darkMode
+    }
 
   },
   extraReducers: (builder) => {
@@ -137,6 +142,6 @@ const usersSlice = createSlice({
   }
 });
 
-export const { userLoginInputChange, clearLoginForm, updateUserDataFromSignUp } = usersSlice.actions
+export const { userLoginInputChange, clearLoginForm, updateUserDataFromSignUp, setDarkModeOn } = usersSlice.actions
 
 export default usersSlice.reducer

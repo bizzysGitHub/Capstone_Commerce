@@ -13,7 +13,7 @@ const Categories = () => {
 
 
   const categoryData = useAppSelector((state) => state.categories)
-  const { isLoading, categoriesMap } = categoryData
+  const { categoriesMap } = categoryData
 
   const allProducts: CategoryItem[] = categoriesMap.flatMap((data) => {
     const category = data[product as string]

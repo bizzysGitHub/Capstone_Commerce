@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "module": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "module": "ES2022",
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     },
-
+  "types": ["vite-plugin-svgr/client"],
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,

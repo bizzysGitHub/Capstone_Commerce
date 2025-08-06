@@ -1,10 +1,10 @@
 // import { useState } from 'react'
 import Navbar from './components/nav-bar/nav-bar.component'
-import './index.scss'
+import './index.css'
+import "@radix-ui/themes/styles.css";
 import { useEffect } from 'react'
-import { useAppDispatch } from './app/hooks/custom'
+import { useAppDispatch, useAppSelector } from './app/hooks/custom'
 import { getCategories } from './features/categories/categorySlice'
-
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import ErrorPage from './ui/error-page.tsx'
 import SignInPage from './routes/login/log-in-page.component.tsx'
@@ -13,12 +13,14 @@ import Shop from './routes/shop/shop.component.tsx'
 import Checkout from './routes/checkout/checkout-component.tsx'
 import Categories from './components/category/category.component.js'
 import Fallback from './ui/fall-back.tsx'
+import { Theme } from '@radix-ui/themes';
 // import { addFieldsAndDocuments } from '../src/utils/firebase/firebase.ts
 
 
 
 
 function App() {
+  const darkMode = useAppSelector((state) => state.users.darkMode)
   const dispatch = useAppDispatch();
 
 
@@ -68,12 +70,12 @@ function App() {
   ])
 
   return (
-    <>
+    <Theme appearance={darkMode ? 'dark':'light'} >
       <RouterProvider
         router={router}
         />
 
-    </>
+    </Theme>
 
   )
 }

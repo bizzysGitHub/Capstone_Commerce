@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useState } from 'react'
 import { handleNewUserWithEmailPassword } from '../../../utils/firebase/firebase';
 import { FormInput } from '../../../components/form-input/form-input.component';
 import Button from '../../../components/button/button.component';
-import {SignUpContainer, Heading2} from '../log-in-page.styles'
+import { LogInContainer} from '../log-in-page.styles'
 import { useAppDispatch, } from '../../../app/hooks/custom';
 import { updateUserDataFromSignUp } from '../../../features/user-information/usersSlice' 
 
@@ -65,8 +65,8 @@ const SignUpForm = () => {
 
     }
     return (
-        <SignUpContainer>
-            <Heading2> Don't Have an Account?</Heading2>
+        <LogInContainer>
+            <h2> Don't Have an Account?</h2>
             <span>Sign up with your email </span>
             <form onSubmit={handleSubmit}>
                 <FormInput
@@ -104,7 +104,7 @@ const SignUpForm = () => {
                 />
                <Button type='submit'>Lets Get Started</Button>
             </form>
-        </SignUpContainer>
+        </LogInContainer>
     )
 }
 

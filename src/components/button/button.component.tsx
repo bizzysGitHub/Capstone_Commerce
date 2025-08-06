@@ -1,6 +1,6 @@
 
 import { ButtonHTMLAttributes, ReactNode } from 'react'
-import {ButtonContainer } from './button.style'
+import {ButtonContainer}  from './button.style'
 
 
 
@@ -24,6 +24,7 @@ const Button = ({ children, buttonType, ...otherAttributes }: customButton) => {
         >
             {children}
         </ButtonContainer>
+       
     )
 }
 

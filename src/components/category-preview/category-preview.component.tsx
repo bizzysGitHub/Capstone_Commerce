@@ -3,7 +3,7 @@ import ProductCard from '../product-card/product-card-component';
 import { CategoryPreviewContainer, Title, Preview } from './category-preview.styles'
 import { Link } from 'react-router';
 import { useAppSelector } from '../../app/hooks/custom';
-import { CategoryData, CategoryItem, CategoryMap } from '@/utils/types';
+import { CategoryItem, CategoryMap } from '@/utils/types';
 
 const SectionItemsPreview = (products: CategoryItem[]): ReactElement[] =>
     products.slice(0, 4).map((product) => (

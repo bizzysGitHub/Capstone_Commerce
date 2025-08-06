@@ -12,14 +12,19 @@ import CartDropdown from '../../components/cart-dropdown/cart-dropdown-component
 import { showDropdown, emptyCart } from '../../features/cart-items/cartItemSlice'
 import { useAppSelector, useAppDispatch } from '../../app/hooks/custom'
 import { RootState } from '../../redux/store'
-import { _signOutUser } from '../../features/user-information/usersSlice'
+import { _signOutUser, setDarkModeOn } from '../../features/user-information/usersSlice'
+import { SunIcon, MoonIcon } from "@radix-ui/react-icons"
+import { IconButton } from '@radix-ui/themes'
 
 
 
 export default function Navbar() {
   const cart = useAppSelector((state: RootState) => state.cartItems)
-  const userData = useAppSelector((state :RootState) => state.users.userDataFromFirebase)
-  const dispatch = useAppDispatch()
+  // const userData = useAppSelector((state :RootState) => state.users.userDataFromFirebase)
+  const user = useAppSelector((state: RootState) => state.users)
+  const dispatch = useAppDispatch();
+  const userData = user.userDataFromFirebase
+  const darkMode = user.darkMode
 
   const handleSignOut = async () => {
     await dispatch(_signOutUser())
@@ -27,6 +32,9 @@ export default function Navbar() {
   }
   const handleDropdown = () => {
     dispatch(showDropdown())
+  }
+  const setDarkMode = () => {
+    dispatch(setDarkModeOn())
   }
   return (
     <>
@@ -38,6 +46,15 @@ export default function Navbar() {
           <NavLink to={'/shop'}> Shopping page</NavLink>
           <NavLink to={'/sign-in'}> {userData ? <span onClick={() => handleSignOut()}>Sign-out</span> : 'Sign In'}</NavLink>
           <CartIcon onClick={handleDropdown} />
+          <IconButton 
+            variant='ghost'
+            onClick={setDarkMode}
+            radius='full'
+            color='gray'
+            m="2"
+            >
+            {darkMode ? <SunIcon color='gold' width="18" height="18" className='cursor-pointer'/> : <MoonIcon color='gray' width="18" height="18" className='cursor-pointer'/>}
+          </IconButton>
         </NavLinksContainer>
         {cart.showDropdown && <CartDropdown />}
       </NavigationContainer>

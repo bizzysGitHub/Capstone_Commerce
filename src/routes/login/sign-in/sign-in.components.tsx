@@ -1,11 +1,11 @@
 import { ChangeEvent, FormEvent } from 'react'
-import Button from '../../../components/button/button.component'
+import { motion } from 'framer-motion'
+import { Box, Card, Flex, Heading, Text,Button, Grid } from '@radix-ui/themes'
 import { FormInput } from '../../../components/form-input/form-input.component'
-import { SignUpContainer } from '../log-in-page.styles'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/custom'
 import { clearLoginForm, loginWithEmailAndPassword, loginWithGoogle, userLoginInputChange } from '../../../features/user-information/usersSlice'
 import { useNavigate } from 'react-router'
-
+import { LogInContainer, MotionCard, SignInButton } from '../log-in-page.styles'
 
 
 const SignIn = () => {
@@ -15,10 +15,10 @@ const SignIn = () => {
     const navigate = useNavigate()
 
     const { email, password } = userInfo
-   
+
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
+
         await dispatch(loginWithEmailAndPassword(userInfo))
         dispatch(clearLoginForm())
         navigate('/')
@@ -37,42 +37,59 @@ const SignIn = () => {
 
         dispatch(userLoginInputChange({ id: name, value }))
 
-
     }
+
+
     return (
-        <SignUpContainer>
-            <h2> I already have an account</h2>
-            <span>Sign up with your email </span>
-            <form onSubmit={handleSubmit}>
-                <FormInput
-                    label='Email'
-                    required
-                    type="text"
-                    name="email"
-                    value={email}
-                    onChange={handleInputChange}
-                />
-                <FormInput
-                    label='Password'
-                    required
-                    type="password"
-                    name="password"
-                    value={password}
-                    onChange={handleInputChange}
-                />
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignContent: 'center',
-                    justifyContent: 'space-between'
-                }}>
+        <LogInContainer >
+            <MotionCard
+                variant="surface"
+                size='1'
+                style={{ boxShadow: 'var(--shadow-4)' }}
+                
+                // animate={{ y: [0, -6, 0] }}
+                // transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut' }}
+            >
+                <Flex align="center" direction="row" justify="center">
+                    <Heading as="h2" size="8" m="5" align="center">
+                        Sign In
+                    </Heading>
+                </Flex>
+            </MotionCard>
+            <Flex px='6' direction='column' align='center' >
+                <form className='w-full' onSubmit={handleSubmit}>
+                    <FormInput
+                        label='Email'
+                        required
+                        type="text"
+                        name="email"
+                        value={email}
+                        onChange={handleInputChange}
+                    />
+                    <FormInput
+                        label='Password'
+                        required
+                        type="password"
+                        name="password"
+                        value={password}
+                        onChange={handleInputChange}
+                    />
+                    <Grid gap='5' justify='center' align='center'  columns='repeat(auto-fill, minmax(150px,1fr))'>
+                        <SignInButton variant="classic"  type='submit'>Sign In</SignInButton>
+                        <Button onClick={googleLogin} color='blue' >Google Sign In</Button>
+                        
+                    </Grid>
+                    {/* <Flex mb='5' gap="3" justify="center" wrap='wrap'>
+                    </Flex> */}
+                </form>
+                    <Text asChild size={{xs:'2', sm:'5'}} mt='5'>
+                        <a href='#'>
+                            I already have an account
+                        </a>
+                    </Text>
 
-                    <Button type='submit'>Sign In</Button>
-                    <Button onClick={googleLogin} buttonType='google'> Google Sign In</Button>
-                </div>
-            </form>
-        </SignUpContainer>
-
+            </Flex>
+        </LogInContainer>
     )
 
 }
