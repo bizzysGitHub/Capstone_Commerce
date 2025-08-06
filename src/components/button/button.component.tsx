@@ -1,12 +1,9 @@
 
 import { ButtonHTMLAttributes, ReactNode } from 'react'
-import {ButtonContainer } from './button.style'
+import {ButtonContainer}  from './button.style'
 
 
-// type bizzyButton ={
-//     children: ReactNode
-//     onClick: () => void
-// }
+
 
 interface customButton extends ButtonHTMLAttributes<HTMLButtonElement> {
     children: ReactNode,
@@ -27,6 +24,7 @@ const Button = ({ children, buttonType, ...otherAttributes }: customButton) => {
         >
             {children}
         </ButtonContainer>
+       
     )
 }
 

@@ -1,27 +1,25 @@
 
-import Button from "../button/button.component"
-import { useContext, useState } from "react"
-import { CartContext } from "../../contexts/cart-contexts"
-import IStoreItems from "../../interfaces/storeItems"
 import {ProductCardContainer,
   ProductImage,
   AddToCartButton,
   FooterContainer,
   ProductName,
   ProductPrice} from './product-card.styles'
+import { useAppDispatch } from "../../app/hooks/custom"
+import { addItemToCart } from "../../features/cart-items/cartItemSlice"
+import { CategoryItem } from "@/utils/types"
 
 type Props = {
-    product: IStoreItems
+    product: CategoryItem
 }
 
 
 
-
 const ProductCard = ({product}:Props) => {
-  const { addItemToCart } = useContext(CartContext);
+    const dispatch = useAppDispatch();
   const {name, price, imageUrl, id} = product;
 
-  const addProductToCart = () => addItemToCart(product)
+  const addProductToCart = () => dispatch(addItemToCart(product))
 
   return (
     <ProductCardContainer key={id}>

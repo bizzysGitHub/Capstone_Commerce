@@ -1,5 +1,5 @@
 import { Dispatch, ReactNode, createContext, useEffect, useState, SetStateAction} from "react";
-import { onAuthStateChangeListner as onAuthStateChangeListener, signOutUser } from "../utils/firebase/firebase";
+import { onAuthStateChangeListener as onAuthStateChangeListener } from "../utils/firebase/firebase";
 import { User } from "firebase/auth";
 import { DocumentData } from "firebase/firestore";
 

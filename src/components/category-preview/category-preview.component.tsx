@@ -1,63 +1,36 @@
-
-import React, { ReactNode, useContext } from 'react';
-import IStoreItems from '../../interfaces/storeItems';
+import { ReactElement, useMemo } from 'react';
 import ProductCard from '../product-card/product-card-component';
-import { CategoriesContext } from '../../contexts/categories-contexts';
-import IStoreProducts from '../../interfaces/products';
 import { CategoryPreviewContainer, Title, Preview } from './category-preview.styles'
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
+import { useAppSelector } from '../../app/hooks/custom';
+import { CategoryItem, CategoryMap } from '@/utils/types';
 
-
-//IStoreProducts['items']
-//categoriesMap[title as keyof typeof categoriesMap]
-
-
-
-const SectionItemsPreview = (products: IStoreProducts[] | IStoreItems): ReactNode[] => {
-
-    const previewItemsArray = Object.values(products)
-        .map((itemsArray): ReactNode[] => {
-            return itemsArray.reduce((acc: ReactNode[], items: IStoreItems) => {
-                acc.length < 4
-                    ? acc.push(<ProductCard key={items.id} product={items} />)
-                    : acc
-                return acc
-            }, [])
-        });
-    return previewItemsArray;
-
-}
+const SectionItemsPreview = (products: CategoryItem[]): ReactElement[] =>
+    products.slice(0, 4).map((product) => (
+        <ProductCard key={product.id} product={product} />
+    ));
 
 const CategoryPreview = () => {
-    const { categoriesMap } = useContext(CategoriesContext)
-    const category = categoriesMap
-    return (
+    const categoryData = useAppSelector((state) => state.categories);
+    const { categoriesMap } = categoryData;
+        return (
         <>
             {
-                Object.keys(categoriesMap).map((title, id) => {
+                categoriesMap.map((productObject: CategoryMap, id: number) => {
+                    const [title, data] = Object.entries(productObject)[0];
+
                     return (
                         <CategoryPreviewContainer key={id}>
-                            <div>
-                                <h2>
-                                    <Link to={title}>
-                                        <Title>
-                                            {title}
-                                        </Title>
-                                    </Link>
-                                </h2>
-                                <Preview>
-
-                                    {
-                                        SectionItemsPreview(category)
-                                    }
-                                </Preview>
-                            </div>
+                            <h2>
+                                <Link to={title}>
+                                    <Title>{title}</Title>
+                                </Link>
+                            </h2>
+                            <Preview>{SectionItemsPreview(data.items)}</Preview>
                         </CategoryPreviewContainer>
-                    )
+                    );
                 })
-
             }
-
         </>
     )
 }

@@ -1,40 +1,34 @@
-import { Suspense, useContext, useEffect, useState } from "react";
-import { Await, useParams } from "react-router-dom";
-import { CategoriesContext } from "../../contexts/categories-contexts";
-import IStoreProducts from "../../interfaces/products";
+import { useParams } from "react-router";
 import ProductCard from "../product-card/product-card-component";
-// import '../category-preview/category-preview.styles.scss'
-// import { CategoryPreviewContainer, Title, Preview } from '../category-preview/category-preview.styles'
-import ErrorPage from "../../error-page";
 import { CategoryContainer } from './category.styles'
+import { useAppSelector } from "../../app/hooks/custom";
+import { Suspense } from "react";
+import Fallback from "../../ui/fall-back";
+import { CategoryItem } from "@/utils/types";
+
 
 
 const Categories = () => {
   const { product } = useParams();
-  const { categoriesMap } = useContext(CategoriesContext)
 
-  const allProducts: IStoreProducts['items'] = categoriesMap[product as keyof typeof categoriesMap];
 
-  const [category, setCategory] = useState(allProducts || {});
+  const categoryData = useAppSelector((state) => state.categories)
+  const { categoriesMap } = categoryData
 
-  useEffect(() => {
-    setCategory(allProducts)
-  }, [allProducts, category, product])
+  const allProducts: CategoryItem[] = categoriesMap.flatMap((data) => {
+    const category = data[product as string]
+    return category ? category.items : []
 
-  
+  })
+
+
   return (
-    <>
-      {Object.values(categoriesMap).length < 1
-        ? <h3>Loading...</h3>
-        : !allProducts
-          ? <h3>Error No Page Found</h3>
-          : <CategoryContainer>
-            {
-              category && category.map((productItem: any) => (<ProductCard key={productItem.id} product={productItem} />))
-            }
-          </CategoryContainer>}
-    </>
-  )
+    <Suspense fallback={<Fallback />}>
+      <CategoryContainer>
+        {allProducts && allProducts.map((productItem: CategoryItem) => (<ProductCard key={productItem.id} product={productItem} />))}
+      </CategoryContainer>
+    </Suspense>)
+
 }
 
 export default Categories

@@ -1,0 +1,14 @@
+@import "tailwindcss";
+/* now any @layer or custom rules… */
+
+:root {
+  --font-sans: 'Pangolin', system-ui, sans-serif;
+  padding: 20px 40px;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+* {
+  box-sizing: border-box;
+}   

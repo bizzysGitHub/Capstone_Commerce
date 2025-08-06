@@ -2,12 +2,23 @@ import { ChangeEvent, FormEvent, useState } from 'react'
 import { handleNewUserWithEmailPassword } from '../../../utils/firebase/firebase';
 import { FormInput } from '../../../components/form-input/form-input.component';
 import Button from '../../../components/button/button.component';
-import {SignUpContainer, Heading2} from '../log-in-page.styles'
+import { LogInContainer} from '../log-in-page.styles'
+import { useAppDispatch, } from '../../../app/hooks/custom';
+import { updateUserDataFromSignUp } from '../../../features/user-information/usersSlice' 
 
 
 
+/**
+ * AS of Sep 3 im keeping this useEffect here for the displayname and the confirmPassword
+ * I think once i update how this form works with react-form-hooks, I'll be able to check
+ * validation of the passwords with zod and not need to keep state in this component. 
+ * The email and the password are already in the userSlice, along with the returned data from firebase
+ * 
+ * Revisions will come soon
+ */
 
-interface FormInfo {
+
+type FormInfo = {
     displayName: string,
     email: string,
     password: string,
@@ -26,6 +37,7 @@ const SignUpForm = () => {
     const [formValues, SetFormValues] = useState<FormInfo>(defaultValues);
 
     const { displayName, email, password, confirmPassword, } = formValues;
+    const dispatch = useAppDispatch()
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -35,23 +47,26 @@ const SignUpForm = () => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (password !== confirmPassword) {
-            alert("passwords do not match")
+            alert('passwords do not match')
             SetFormValues({ ...formValues, ['password']: '', ['confirmPassword']: '' })
             return;
         }
         try {
-
-            await handleNewUserWithEmailPassword(email, password, { displayName });
+            
+            const userInfo = await handleNewUserWithEmailPassword(email, password, { displayName });
+            dispatch(updateUserDataFromSignUp(userInfo))
             SetFormValues(defaultValues);
 
-        } catch (error: any) {
-            error.code === 'auth/email-already-in-use' ? alert("uh-oh user already in use :(") : alert(error);
+        } catch (error) {
+            console.log(error);
+            throw new Error("uh-ou email may be in use already")
+            // error.code === 'auth/email-already-in-use' ? alert("uh-oh user already in use :(") : alert(error);
         }
 
     }
     return (
-        <SignUpContainer>
-            <Heading2> Don't Have an Account?</Heading2>
+        <LogInContainer>
+            <h2> Don't Have an Account?</h2>
             <span>Sign up with your email </span>
             <form onSubmit={handleSubmit}>
                 <FormInput
@@ -89,7 +104,7 @@ const SignUpForm = () => {
                 />
                <Button type='submit'>Lets Get Started</Button>
             </form>
-        </SignUpContainer>
+        </LogInContainer>
     )
 }
 

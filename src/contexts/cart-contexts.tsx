@@ -1,20 +1,19 @@
+import { CategoryItem } from "@/utils/types";
 import { Dispatch, ReactNode, SetStateAction, createContext, useReducer } from "react";
-import IStoreProducts from "../interfaces/products"
-import IStoreItems from "../interfaces/storeItems";
 
 type Props = {
     children: ReactNode
 }
 export default interface ICartContext {
-    itemsInCart: IStoreItems[],
-    // setItemsInCart: Dispatch<SetStateAction<IStoreItems[]>>,
+    itemsInCart: CategoryItem[],
+    // setItemsInCart: Dispatch<SetStateAction<CategoryItem[]>>,
     totalItems: number
     // setTotalItems: Dispatch<SetStateAction<number>>,
     totalPrice: number
     // setTotalPrice: Dispatch<SetStateAction<number>>,
-    addItemToCart: (productToAdd: IStoreItems) => void
-    removeItemFromCart: (cartItemToRemove: IStoreItems) => void
-    clearItemFromCart: (cartItemToClear: IStoreItems) => void
+    addItemToCart: (productToAdd: CategoryItem) => void
+    removeItemFromCart: (cartItemToRemove: CategoryItem) => void
+    clearItemFromCart: (cartItemToClear: CategoryItem) => void
     showDropdown: boolean,
     setShowDropDown: Dispatch<SetStateAction<boolean>>,
 
@@ -38,7 +37,7 @@ export const CartContext = createContext<ICartContext>({
 
 
 //Helper functions 
-const IncreaseItemQuantity = (cartItems: IStoreItems[], productToAdd: IStoreItems) => {
+const IncreaseItemQuantity = (cartItems: CategoryItem[], productToAdd: CategoryItem) => {
 
     const existingCartItem = cartItems.find((cartItem) => cartItem.id === productToAdd.id);
 
@@ -54,7 +53,7 @@ const IncreaseItemQuantity = (cartItems: IStoreItems[], productToAdd: IStoreItem
     return [...cartItems, { ...productToAdd, quantity: 1 }]
 };
 
-const DecreaseItemQuantity = (cartItems: IStoreItems[], cartItemToRemove: IStoreItems) => {
+const DecreaseItemQuantity = (cartItems: CategoryItem[], cartItemToRemove: CategoryItem) => {
 
     const existingCartItem = cartItems.find((cartItem) => cartItem.id === cartItemToRemove.id);
 
@@ -73,11 +72,11 @@ const DecreaseItemQuantity = (cartItems: IStoreItems[], cartItemToRemove: IStore
 //removes all the quantity of one item from the cart
 //real confusing . need to fix later
 
-const clearCartItem = (cartItems: IStoreItems[], cartItemToClear: IStoreItems) => cartItems.filter(cartItem => cartItem.id !== cartItemToClear.id)
+const clearCartItem = (cartItems: CategoryItem[], cartItemToClear: CategoryItem) => cartItems.filter(cartItem => cartItem.id !== cartItemToClear.id)
 
 
 type State = {
-    itemsInCart: IStoreItems[],
+    itemsInCart: CategoryItem[],
     totalItems: number,
     totalPrice: number,
     showDropdown: boolean,
@@ -132,7 +131,7 @@ export const CartProvider = ({ children }: Props) => {
     // const [showDropdown, dispatch2] = useReducer(() => !INITIAL_STATE.showDropdown, INITIAL_STATE);
 
 
-    const updateCartReducer = (newCartItem: IStoreItems[]) => {
+    const updateCartReducer = (newCartItem: CategoryItem[]) => {
         const newCartCount = newCartItem.reduce((total, cartItem) => total + Number(cartItem.quantity), 0)
 
         const newCartPrice = newCartItem.reduce((total, cartItem) => total + Number(cartItem.quantity) * cartItem.price, 0)
@@ -148,16 +147,16 @@ export const CartProvider = ({ children }: Props) => {
     };
 
 
-    const addItemToCart = (productToAdd: IStoreItems) => {
+    const addItemToCart = (productToAdd: CategoryItem) => {
         const addedItemsArray = IncreaseItemQuantity(itemsInCart, productToAdd);
         updateCartReducer(addedItemsArray)
     };
 
-    const removeItemFromCart = (cartItemToRemove: IStoreItems) => {
+    const removeItemFromCart = (cartItemToRemove: CategoryItem) => {
         const deletedItemArray = DecreaseItemQuantity(itemsInCart, cartItemToRemove);
         updateCartReducer(deletedItemArray)
     };
-    const clearItemFromCart = (cartItemToClear: IStoreItems) => {
+    const clearItemFromCart = (cartItemToClear: CategoryItem) => {
         const clearedArray = clearCartItem(itemsInCart, cartItemToClear);
         updateCartReducer(clearedArray)
 

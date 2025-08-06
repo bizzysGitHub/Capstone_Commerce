@@ -12,6 +12,7 @@ export const ShrinkLabelMixin = css`
 export const GroupContainer = styled.div`
   position: relative;
   margin: 45px 0;
+  
 `;
 
 export const FormComponent = styled.input`

@@ -11,26 +11,6 @@ interface formIpProps extends InputHTMLAttributes<HTMLInputElement> {
 
 }
 
-//fix this clean it up
-
-// export const FormInput = ({ label, ...otherInputProps }: formIpProps) => {
-//     return (
-//         <div className="group">
-//              <input
-//                 className="form-input"
-//                 {...otherInputProps} />
-//             {label && (
-//                 <label className={
-//                     `${otherInputProps?.value.length ? 'shrink' : ''} form-input-label`}>
-//                     {label}
-//                 </label> 
-//                 )}
-           
-//         </div>
-
-//     )
-
-// }
 
 export const FormInput = ({ label, ...otherInputProps }: formIpProps) => {
     return (
