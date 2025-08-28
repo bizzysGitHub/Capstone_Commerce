@@ -10,7 +10,7 @@ const SignInPage = () => {
 //gap='5' columns='2' width='auto' justify='end'
 
   return (
-    <LoginPageContainer size='4'>
+    <LoginPageContainer size='2'>
     <Grid gap='5' justify='center' width='auto' align='stretch'  columns='repeat(auto-fit, minmax(200px, 1fr))'>
     <SignIn />
     <SignUpForm />

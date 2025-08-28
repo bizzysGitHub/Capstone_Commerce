@@ -11,7 +11,7 @@ export const NavigationContainer = styled.div`
 
 export const LogoContainer = styled.div`
   height: 100%;
-  width: 70px;
+  width: 80px;
   padding: 25px;
 `;
 

@@ -13,7 +13,7 @@ import Shop from './routes/shop/shop.component.tsx'
 import Checkout from './routes/checkout/checkout-component.tsx'
 import Categories from './components/category/category.component.js'
 import Fallback from './ui/fall-back.tsx'
-import { Theme } from '@radix-ui/themes';
+import { Box, Container, Theme } from '@radix-ui/themes';
 // import { addFieldsAndDocuments } from '../src/utils/firebase/firebase.ts
 
 
@@ -68,12 +68,25 @@ function App() {
     },
 
   ])
-
+/**
+ * {{ background: "var(--indigo-a9)", borderRadius: "var(--radius-3)" }}
+ */
   return (
-    <Theme appearance={darkMode ? 'dark':'light'} >
+    <Theme 
+    appearance={darkMode ? 'dark':'light'} 
+    accentColor='jade'
+    grayColor='sage' >
+      <Box 
+      height='100vh' 
+      style={{background: "var(--accent-5)" , borderRadius:"var(--radius-6)"}}>
+        <Container size="4" >
       <RouterProvider
         router={router}
         />
+
+        </Container>
+
+      </Box>
 
     </Theme>
 

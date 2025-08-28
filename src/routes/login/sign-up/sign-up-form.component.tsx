@@ -1,11 +1,11 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { handleNewUserWithEmailPassword } from '../../../utils/firebase/firebase';
-import { FormInput } from '../../../components/form-input/form-input.component';
 import Button from '../../../components/button/button.component';
-import { LogInContainer} from '../log-in-page.styles'
-import { useAppDispatch, } from '../../../app/hooks/custom';
-import { updateUserDataFromSignUp } from '../../../features/user-information/usersSlice' 
-
+import { BaseButton, LogInContainer, SignUpButton } from '../log-in-page.styles'
+import { useAppDispatch, useAppSelector, } from '../../../app/hooks/custom';
+import { updateUserDataFromSignUp } from '../../../features/user-information/usersSlice'
+import { Box, Flex, Heading, Text } from '@radix-ui/themes';
+import { RdFormInput } from '@/components/form-input/form-input.component'
 
 
 /**
@@ -34,6 +34,8 @@ const defaultValues = {
 
 const SignUpForm = () => {
 
+    const darkMode = useAppSelector((state) => state.users.darkMode);
+
     const [formValues, SetFormValues] = useState<FormInfo>(defaultValues);
 
     const { displayName, email, password, confirmPassword, } = formValues;
@@ -52,7 +54,7 @@ const SignUpForm = () => {
             return;
         }
         try {
-            
+
             const userInfo = await handleNewUserWithEmailPassword(email, password, { displayName });
             dispatch(updateUserDataFromSignUp(userInfo))
             SetFormValues(defaultValues);
@@ -66,44 +68,87 @@ const SignUpForm = () => {
     }
     return (
         <LogInContainer>
-            <h2> Don't Have an Account?</h2>
-            <span>Sign up with your email </span>
-            <form onSubmit={handleSubmit}>
-                <FormInput
-                    label='Display Name'
-                    required
-                    type="text"
-                    name="displayName"
-                    value={displayName}
-                    onChange={handleInputChange}
-                />
+            <Flex px="6" direction="column" align="center" justify="between" >
+                <Heading
+                    as="h1"
+                    my="4"
+                    size={{ xs: "2", sm: "6" }}
+                    weight="bold"
+                    align="center" >
+                    Don't Have an Account?
+                </Heading>
+                <Heading
+                    size={{ xs: "2", sm: "4" }}
+                    weight="light"
+                    align="center"
+                    color='gray'
+                    as='h2'
 
-               <FormInput
-                    label='Email'
-                    required
-                    type="text"
-                    name="email"
-                    value={email}
-                    onChange={handleInputChange}
-                />
-                 <FormInput
-                    label='Password'
-                    required
-                    type="password"
-                    name="password"
-                    value={password}
-                    onChange={handleInputChange}
-                />
-                  <FormInput
-                    label='Confirm Password'
-                    required
-                    type="password"
-                    name="confirmPassword"
-                    value={confirmPassword}
-                    onChange={handleInputChange}
-                />
-               <Button type='submit'>Lets Get Started</Button>
-            </form>
+                > Sign up with your email </Heading>
+
+                <form
+                    className="w-full"
+                    onSubmit={handleSubmit}>
+                    {/* <FormInput
+                        label='Display Name'
+                        required
+                        type="text"
+                        name="displayName"
+                        value={displayName}
+                        onChange={handleInputChange}
+                    /> */}
+                    <RdFormInput
+                        label='Display Name'
+                        value={displayName}
+                        required
+                        type="text"
+                        name="displayName"
+                        onChange={handleInputChange}
+                        variant="classic" 
+                        color='jade'
+                        RdLabelProps={{
+                           color:'jade'
+                        }}
+                    />
+                    <RdFormInput
+                        label='Email'
+                        required
+                        type="text"
+                        name="email"
+                        value={email}
+                        onChange={handleInputChange}
+                        variant="classic"
+                        color='jade'
+                        RdLabelProps={{ color: 'jade' }}
+                    />
+                    <RdFormInput
+                        label='Password'
+                        required
+                        type="password"
+                        name="password"
+                        value={password}
+                        onChange={handleInputChange}
+                        variant="classic"
+                        color='jade'
+                        RdLabelProps={{ color: 'jade' }}
+                    />
+                    <RdFormInput
+                        label='Confirm Password'
+                        required
+                        type="password"
+                        name="confirmPassword"
+                        value={confirmPassword}
+                        onChange={handleInputChange}
+                        variant="classic"
+                        color='jade'
+                        RdLabelProps={{ color: 'jade' }}
+                    />
+                    <SignUpButton variant={darkMode ? "soft" : "outline"}
+                        type="submit"
+                        highContrast
+                        mb="5" >Lets Get Started</SignUpButton>
+                </form>
+            </Flex>
         </LogInContainer>
     )
 }

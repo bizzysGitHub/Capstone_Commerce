@@ -1,5 +1,6 @@
-import { Outlet, Link } from 'react-router'
 import CrownLogo from '../../assets/crown.svg'
+import CapstoneLogo from '@/assets/CapstoneLogo.svg'
+import { Outlet, Link } from 'react-router'
 import {
   NavigationContainer,
   LogoContainer,

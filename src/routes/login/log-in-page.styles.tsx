@@ -18,15 +18,29 @@ export const LoginPageContainer = styled(Container)`
 // border: solid 4px gold
 `;
 
-export const SignInButton = styled(Button)`
+export const BaseButton = styled(Button)`
 letter-spacing: 0.5px;
-    line-height: 50px;
-    padding: 20px 0; 
-    font-size: 15px;
-    // background-color: black;
-    color: white;
-    // text-transform: uppercase;
+font-weight: bolder;
 
-    font-weight: bolder;
-    cursor: pointer;
+line-height: 50px;
+font-size: 15px;
+
+&:hover:not(:disabled){
+  cursor: pointer
+  }
+`
+
+export const SignInButton = styled(BaseButton)`
+    width: 100%   
+`
+export const GoogleButton = styled(BaseButton)`
+    width: 100% ;
+    flex:1  
+`
+export const FaceBookButton = styled(BaseButton)`
+  width: 100%  ;
+  flex: 1 
+`
+export const SignUpButton = styled(BaseButton)`
+  width: 100%   
 `
