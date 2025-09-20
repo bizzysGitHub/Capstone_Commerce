@@ -16,13 +16,15 @@ A small e-commerce application built with **React**, **Redux**, **TypeScript**, 
 
 ---
 
-## 🗓 Next Up
+## 📋 Next Up
 
 - Build checkout page and connect to Stripe payments  
 - Replace legacy CSS with Radix UI styling  
 - Fix product images on mobile layouts  
 - Add Redux slices for improved state management  
 - Expand Firebase usage for order tracking  
+- Swap to use `react-hook-form`  
+- Add form validations with Zod  
 
 ---
 
@@ -38,6 +40,7 @@ A small e-commerce application built with **React**, **Redux**, **TypeScript**, 
 ## 📦 Getting Started
 
 ### Prerequisites
+
 - **Node.js** `>= 18`  
 - **npm** or **yarn`  
 - **Firebase account** (for auth + database)  
