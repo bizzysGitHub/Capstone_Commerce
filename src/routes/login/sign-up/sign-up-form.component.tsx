@@ -104,10 +104,10 @@ const SignUpForm = () => {
                         type="text"
                         name="displayName"
                         onChange={handleInputChange}
-                        variant="classic" 
+                        variant="classic"
                         color='jade'
                         RdLabelProps={{
-                           color:'jade'
+                            color: 'jade'
                         }}
                     />
                     <RdFormInput

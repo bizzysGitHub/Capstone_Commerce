@@ -77,7 +77,7 @@ function App() {
     accentColor='jade'
     grayColor='sage' >
       <Box 
-      height='100vh' 
+      minHeight='100vh' 
       style={{background: "var(--accent-5)" , borderRadius:"var(--radius-6)"}}>
         <Container size="4" >
       <RouterProvider
