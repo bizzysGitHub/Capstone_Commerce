@@ -5,33 +5,34 @@ import "@radix-ui/themes/styles.css";
 import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from './app/hooks/custom'
 import { getCategories } from './features/categories/categorySlice'
-import { createBrowserRouter, RouterProvider } from 'react-router'
+import { createBrowserRouter, redirect, RouterProvider } from 'react-router'
 import ErrorPage from './ui/error-page.tsx'
 import SignInPage from './routes/login/log-in-page.component.tsx'
 import Home from './routes/home/home.component.tsx'
 import Shop from './routes/shop/shop.component.tsx'
-import Checkout from './routes/checkout/checkout-component.tsx'
+import { Checkout, StripeCheckout } from './routes/checkout/checkout-component.tsx'
 import Categories from './components/category/category.component.js'
 import Fallback from './ui/fall-back.tsx'
 import { Box, Container, Theme } from '@radix-ui/themes';
+import { TestCheckout } from './utils/stripe/TestCheckout.tsx';
 // import { addFieldsAndDocuments } from '../src/utils/firebase/firebase.ts
 
 
 
 
 function App() {
-  const darkMode = useAppSelector((state) => state.users.darkMode)
+  const { darkMode, userDataFromFirebase } = useAppSelector((state) => state.users)
   const dispatch = useAppDispatch();
 
-
   useEffect(() => {
+
     const categoryLoader = async () => {
       await dispatch(getCategories()).unwrap()
     };
-
     categoryLoader()
 
-  }, [dispatch])
+
+  }, [dispatch, userDataFromFirebase])
 
 
   const router = createBrowserRouter([
@@ -40,10 +41,13 @@ function App() {
       errorElement: <ErrorPage />,
       element: <Navbar />,
       hydrateFallbackElement: <Fallback />,
+
+
       children: [
         {
           path: '/',
           element: <Home />,
+
 
         },
         {
@@ -61,28 +65,35 @@ function App() {
         },
         {
           path: '/checkout',
-          element: <Checkout />
+          element: <Checkout />, //<TestCheckout />,
+          loader: () => {
+            if (userDataFromFirebase === null) {
+
+              throw redirect('/sign-in')
+            }
+            // return
+          },
         }
       ]
 
     },
 
   ])
-/**
- * {{ background: "var(--indigo-a9)", borderRadius: "var(--radius-3)" }}
- */
+  /**
+   * {{ background: "var(--indigo-a9)", borderRadius: "var(--radius-3)" }}
+   */
   return (
-    <Theme 
-    appearance={darkMode ? 'dark':'light'} 
-    accentColor='jade'
-    grayColor='sage' >
-      <Box 
-      minHeight='100vh' 
-      style={{background: "var(--accent-5)" , borderRadius:"var(--radius-6)"}}>
+    <Theme
+      appearance={darkMode ? 'dark' : 'light'}
+      accentColor='jade'
+      grayColor='sage' >
+      <Box
+        minHeight='100vh'
+        style={{ background: "var(--accent-5)", borderRadius: "var(--radius-6)" }}>
         <Container size="4" >
-      <RouterProvider
-        router={router}
-        />
+          <RouterProvider
+            router={router}
+          />
 
         </Container>
 

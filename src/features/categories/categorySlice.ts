@@ -17,7 +17,6 @@ const initialState: Categories = {
 export const getCategories = createAsyncThunk('categories/retrieve', async (_, thunkAPI) => {
     try {
         const data = await getCategoriesAndDocs();
-        console.log(data);
 
         return data;
     } catch (error: unknown) {

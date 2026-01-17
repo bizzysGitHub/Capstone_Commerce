@@ -1,6 +1,6 @@
 
 import { ButtonHTMLAttributes, ReactNode } from 'react'
-import {ButtonContainer}  from './button.style'
+import { ButtonContainer } from './button.style'
 
 
 
@@ -19,12 +19,12 @@ const Button = ({ children, buttonType, ...otherAttributes }: customButton) => {
 
     return (
         <ButtonContainer
-            className={`${buttonType ? 'button-container ' + buttonTypeClassName[buttonType]: 'button-container'}`}
+            className={`${buttonType ? 'button-container ' + buttonTypeClassName[buttonType] : 'button-container'}`}
             {...otherAttributes}
         >
             {children}
         </ButtonContainer>
-       
+
     )
 }
 

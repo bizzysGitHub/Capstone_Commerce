@@ -1,13 +1,16 @@
 import styled from "styled-components";
-import Button from '../button/button.component'
+// import Button from '../button/button.component'
+import { Box, Card } from "@radix-ui/themes";
 
 // testing switching from scss to styled components
 
-export const CartItems = styled.div`
+export const CartItems = styled(Box)`
     height: 240px;
     display: flex;
     flex-direction: column;
     overflow: scroll;
+    // border: solid 1px var(--accent-7)
+
 `;
 export const EmptyMessage = styled.span`
     font-size: 18px;
@@ -15,7 +18,8 @@ export const EmptyMessage = styled.span`
 `;
 
 
-export const CartDropdownContainer = styled.div`
+
+export const CartDropdownContainer = styled(Card)`
     position: absolute;
     width: 240px;
     height: 340px;
@@ -23,10 +27,13 @@ export const CartDropdownContainer = styled.div`
     flex-direction: column;
     padding: 20px;
     border: 1px solid black;
-    background-color: white;
-    top: 90px;
-    right: 40px;
+    background-color: var(--accent-6);
+    top: 60px;
+    right: 50px;
     z-index: 5;
+    border: solid 3px var(--accent-7)
+    
+    
 
     ${'' /* ${Button} {
     margin-top: auto;

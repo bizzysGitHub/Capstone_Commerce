@@ -7,7 +7,8 @@ interface EnvironmentVariables {
     readonly VITE_STORAGE_BUCKET: string
     readonly VITE_MESSAGING_SENDER_ID: string
     readonly VITE_APP_ID: string
-    readonly VITE_STRIPE_PH_KEY: string
+    readonly VITE_STRIPE_PK_KEY: string
+    readonly VITE_STRIPE_SK_KEY: string
 }
 
 interface ImportMeta {

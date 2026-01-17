@@ -29,7 +29,7 @@ export default function Navbar() {
 
   const handleSignOut = async () => {
     await dispatch(_signOutUser())
-    dispatch(emptyCart())
+    // dispatch(emptyCart())
   }
   const handleDropdown = () => {
     dispatch(showDropdown())

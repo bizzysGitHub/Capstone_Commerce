@@ -1,17 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { DocumentData } from 'firebase/firestore';
+import { AsyncThunkAction, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { loginWithGooglePopup, signOutUser, signUserInWithEmailAndPassword } from '../../utils/firebase/firebase';
+import { UserInfo } from '@/utils/types/user';
 
-
-interface UserInfo {
-  email: string,
-  password: string,
-  userDataFromFirebase: DocumentData | string |null,
-  isError: boolean,
-  isLoading: boolean,
-  darkMode: boolean
-
-}
 
 /***
  * NEED TO UPDATE ALL THE FORMS TO USE REACT-HOOK-FORMS PACKAGE
@@ -23,10 +13,11 @@ const initialState: UserInfo = {
   userDataFromFirebase: null,
   isError: false,
   isLoading: false,
-  darkMode: false
+  darkMode: true
 
 
 };
+
 
 export const loginWithEmailAndPassword = createAsyncThunk('users/loginWithEmail', async (userStateInfo: UserInfo, thunkAPI) => {
   try {

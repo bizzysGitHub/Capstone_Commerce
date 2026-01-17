@@ -1,35 +1,43 @@
-import { ChangeEvent, FormEvent } from 'react'
+import { ChangeEvent, FormEvent, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Box, Card, Flex, Heading, Text, Button, Grid } from '@radix-ui/themes'
 import { RdFormInput } from '../../../components/form-input/form-input.component'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/custom'
 import { clearLoginForm, loginWithEmailAndPassword, loginWithGoogle, userLoginInputChange } from '../../../features/user-information/usersSlice'
-import { useNavigate } from 'react-router'
-import { FaceBookButton, GoogleButton, LogInContainer, MotionCard, SignInButton } from '../log-in-page.styles'
+import { redirect, redirectDocument, useNavigate } from 'react-router'
+import { FaceBookButton, GoogleButton, LogInContainer, SignInButton } from '../log-in-page.styles'
 import GoogleLogo from '@/assets/google.svg?react'
 import FacebookLogo from '@/assets/facebook.svg?react'
 import CapstoneLogo from '@/assets/CapstoneLogo.svg'
 
+
+
+
 const SignIn = () => {
 
-    const userInfo = useAppSelector((state) => state.users);
+
+    const { users } = useAppSelector((state) => state);
+    const { email, password, darkMode, userDataFromFirebase } = users
+
     const dispatch = useAppDispatch();
     const navigate = useNavigate()
 
-    const { email, password, darkMode } = userInfo
+    useEffect(() => {
+        if (userDataFromFirebase !== null) {
+            navigate('/checkout', { replace: true })
+        }
+    }, [userDataFromFirebase])
+
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        await dispatch(loginWithEmailAndPassword(users))
 
-        await dispatch(loginWithEmailAndPassword(userInfo))
-        dispatch(clearLoginForm())
-        navigate('/')
     }
 
     const googleLogin = async () => {
         await dispatch(loginWithGoogle())
-        navigate('/')
-        dispatch(clearLoginForm())
+        // dispatch(clearLoginForm())
 
     }
 
@@ -127,7 +135,7 @@ const SignIn = () => {
                         </Flex>
                     </GoogleButton>
                     <FaceBookButton
-                    disabled
+                        disabled
                         onClick={googleLogin}
                         color="indigo"
                     >
@@ -137,10 +145,6 @@ const SignIn = () => {
                         </Flex>
                     </FaceBookButton>
                 </Flex>
-
-
-
-                {/* </Grid> */}
             </Flex>
         </LogInContainer>
     )
@@ -148,3 +152,4 @@ const SignIn = () => {
 }
 
 export default SignIn
+

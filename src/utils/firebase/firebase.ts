@@ -17,13 +17,19 @@ import {
   doc,
   getDoc,
   setDoc,
+  deleteDoc,
   DocumentReference,
   DocumentData,
   DocumentSnapshot,
   writeBatch,
   getDocs,
+  QueryDocumentSnapshot,
+  QuerySnapshot,
+  Firestore,
 } from "firebase/firestore";
 import { CategoryItem } from '../types';
+
+import { v4 as uuidv4 } from "uuid";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -39,15 +45,17 @@ const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 auth.languageCode = 'it';
 
-const db = getFirestore(firebaseApp);
+const db: Firestore = getFirestore(firebaseApp);
+
+const snapshot: QuerySnapshot<DocumentData> = await getDocs(collection(db, "categories"));
+
 
 const provider = new GoogleAuthProvider();
 
 provider.setCustomParameters({
   login_hint: 'user@example.com',
-  prompt: 'select_account'
+  prompt: 'select_itemObjount'
 });
-
 
 
 /**
@@ -72,14 +80,11 @@ export const addFieldsAndDocuments = async (collectionKey: string, objectToAdd: 
 };
 
 
-export const getCategoriesAndDocs = async (): Promise<
-  { [key: string]: { previewImg: string; items: CategoryItem[] } }[]
-> => {
-  const snapshot = await getDocs(collection(db, "categories"));
+export const getCategoriesAndDocs = async (): Promise<{ [key: string]: { previewImg: string; items: CategoryItem[] } }[]> => {
 
   const itemsDataArray = snapshot.docs.reduce(
     (
-      acc: { [key: string]: { previewImg: string; items: CategoryItem[] } }[],
+      itemArr: { [key: string]: { previewImg: string; items: CategoryItem[] } }[],
       doc
     ) => {
       const { items, title, image } = doc.data();
@@ -89,14 +94,12 @@ export const getCategoriesAndDocs = async (): Promise<
           items: items
         }
       };
-
-      // return [...acc, dataEntry];
-      return [...acc, dataEntry];
+      // return [...itemArr, dataEntry];
+      return [...itemArr, dataEntry];
     },
     []
   );
 
-  console.log(itemsDataArray);
 
   return itemsDataArray;
 }
@@ -190,3 +193,60 @@ export const signUserInWithEmailAndPassword = async (email: string, password: st
 export const signOutUser = async () => await signOut(auth)
 
 export const onAuthStateChangeListener = (callback: any) => onAuthStateChanged(auth, callback)
+
+export const getItemWithPrice = async () => {
+  const itemsWithPrices = snapshot.docs
+    .reduce((itemObj: { [id: string]: { price: number, name: string } }, category: QueryDocumentSnapshot<DocumentData>) => {
+      const { items } = category.data();
+
+      items.forEach((item: any) => {
+        itemObj[item.id] = { price: item.price, name: item.name }
+
+
+        // itemArr.push({
+        //   [item.id]: {
+        //     name: item.name,
+        //     price: item.price
+        //   }
+        // })
+      });
+
+      return itemObj;
+
+    }, {});
+  return itemsWithPrices;
+}
+
+
+//one time use.. not needed anymore 
+/*
+
+const migrateToUUIDs = async () => {
+  const batch = writeBatch(db)
+
+
+  for (const oldDoc of snapshot.docs) {
+    const data = oldDoc.data();
+    const {items, title } = data 
+    
+    const uniqueItems = items.map((item: any) => {
+      const newId = uuidv4();
+      return { ...item, id: newId }
+    }  )
+    // break;
+    try {
+      batch.update(doc(db,'categories',title.toLowerCase()),{
+        ...data, items:uniqueItems
+      })
+    } catch (error) {
+      console.error(error)
+      throw Error("Whoops something went wrong ")
+    }
+  }
+  
+  batch.commit()
+};
+
+migrateToUUIDs();
+
+*/
