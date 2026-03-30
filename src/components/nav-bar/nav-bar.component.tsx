@@ -16,24 +16,25 @@ import { RootState } from '../../redux/store'
 import { _signOutUser, setDarkModeOn } from '../../features/user-information/usersSlice'
 import { SunIcon, MoonIcon } from "@radix-ui/react-icons"
 import { IconButton } from '@radix-ui/themes'
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+
 
 
 
 export default function Navbar() {
   const cart = useAppSelector((state: RootState) => state.cartItems)
-  // const userData = useAppSelector((state :RootState) => state.users.userDataFromFirebase)
-  const user = useAppSelector((state: RootState) => state.users)
+  const { userDataFromFirebase, darkMode } = useAppSelector((state: RootState) => state.users)
   const dispatch = useAppDispatch();
-  const userData = user.userDataFromFirebase
-  const darkMode = user.darkMode
+  // const userData = useAppSelector((state :RootState) => state.users.userDataFromFirebase)
+  // const userData = user.userDataFromFirebase
+  // const darkMode = user.darkMode
 
   const handleSignOut = async () => {
     await dispatch(_signOutUser())
-    // dispatch(emptyCart())
   }
-  const handleDropdown = () => {
-    dispatch(showDropdown())
-  }
+  // const handleDropdown = () => {
+  //   dispatch(showDropdown())
+  // }
   const setDarkMode = () => {
     dispatch(setDarkModeOn())
   }
@@ -45,19 +46,33 @@ export default function Navbar() {
         </LogoContainer>
         <NavLinksContainer>
           <NavLink to={'/shop'}> Shopping page</NavLink>
-          <NavLink to={'/sign-in'}> {userData ? <span onClick={() => handleSignOut()}>Sign-out</span> : 'Sign In'}</NavLink>
-          <CartIcon onClick={handleDropdown} />
-          <IconButton 
+          <NavLink to={'/sign-in'}> {userDataFromFirebase ? <span onClick={() => handleSignOut()}>Sign-out</span> : 'Sign In'}</NavLink>
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger asChild>
+              <button type="button" className="bg-transparent border-none">
+                <CartIcon />
+              </button>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.DropdownMenuContent
+              side="bottom"
+              align="end"
+              sideOffset={8}
+              style={{ backgroundColor: 'var(--accent-3) ' }}
+              className="rounded-md shadow-md p-2 z-50">
+              <CartDropdown />
+            </DropdownMenu.DropdownMenuContent>
+            {/* {cart.showDropdown && <CartDropdown />} */}
+          </DropdownMenu.Root>
+          <IconButton
             variant='ghost'
             onClick={setDarkMode}
             radius='full'
             color='gray'
             m="2"
-            >
-            {darkMode ? <SunIcon color='gold' width="18" height="18" className='cursor-pointer'/> : <MoonIcon color='gray' width="18" height="18" className='cursor-pointer'/>}
+          >
+            {darkMode ? <SunIcon color='gold' width="18" height="18" className='cursor-pointer' /> : <MoonIcon color='gray' width="18" height="18" className='cursor-pointer' />}
           </IconButton>
         </NavLinksContainer>
-        {cart.showDropdown && <CartDropdown />}
       </NavigationContainer>
       <Outlet />
     </>

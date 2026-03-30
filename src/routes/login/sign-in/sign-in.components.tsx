@@ -16,16 +16,22 @@ import CapstoneLogo from '@/assets/CapstoneLogo.svg'
 const SignIn = () => {
 
 
-    const { users } = useAppSelector((state) => state);
+    const { users, cartItems } = useAppSelector((state) => state);
     const { email, password, darkMode, userDataFromFirebase } = users
 
     const dispatch = useAppDispatch();
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (userDataFromFirebase !== null) {
-            navigate('/checkout', { replace: true })
-        }
+        if (userDataFromFirebase !== null ) {
+            if(cartItems.itemsInCart.length > 0) {
+                navigate('/checkout', { replace: true })
+
+            } else{
+                navigate('/shop', { replace: true })
+            }
+        } 
+        
     }, [userDataFromFirebase])
 
 

@@ -13,7 +13,7 @@ const initialState: UserInfo = {
   userDataFromFirebase: null,
   isError: false,
   isLoading: false,
-  darkMode: true
+  darkMode: false
 
 
 };

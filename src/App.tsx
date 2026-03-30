@@ -22,14 +22,15 @@ import { TestCheckout } from './utils/stripe/TestCheckout.tsx';
 
 function App() {
   const { darkMode, userDataFromFirebase } = useAppSelector((state) => state.users)
+  const { categoriesMap } = useAppSelector((state) => state.categories)
   const dispatch = useAppDispatch();
 
   useEffect(() => {
 
-    const categoryLoader = async () => {
-      await dispatch(getCategories()).unwrap()
-    };
-    categoryLoader()
+    // const categoryLoader = async () => {
+    //   await dispatch(getCategories()).unwrap()
+    // };
+    // categoryLoader()
 
 
   }, [dispatch, userDataFromFirebase])
@@ -47,7 +48,6 @@ function App() {
         {
           path: '/',
           element: <Home />,
-
 
         },
         {
@@ -85,11 +85,11 @@ function App() {
   return (
     <Theme
       appearance={darkMode ? 'dark' : 'light'}
-      accentColor='jade'
+      accentColor='blue'
       grayColor='sage' >
       <Box
         minHeight='100vh'
-        style={{ background: "var(--accent-5)", borderRadius: "var(--radius-6)" }}>
+        style={{ background: "var(--accent-4)", borderRadius: "var(--radius-6)" }}>
         <Container size="4" >
           <RouterProvider
             router={router}

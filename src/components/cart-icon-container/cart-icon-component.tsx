@@ -7,35 +7,33 @@ import ShoppingSVG from '@/assets/shopping-bag.svg?react'
 import { ReactNode } from 'react';
 
 
-
-
-
 const ShoppingIcon = () => (
   <ShoppingSVG className="w-6 h-6" />
 );
+
 const ItemCount = ({ children }: { children: number }) => (
   <span className="absolute bottom-3 text-[10px] font-bold">
     {children}
   </span>
 );
-const CartIconContainer = ({ onClick, children }: {
-  onClick: () => void;
-  children: ReactNode
-}) => (
-  <div className="w-[45px] h-[45px] relative flex items-center justify-center cursor-pointer" onClick={onClick}>
+
+const CartIconContainer = ({ children }: { children: ReactNode }) => (
+  <div className="w-[45px] h-[45px] relative flex items-center justify-center cursor-pointer">
     {children}
   </div>
 );
 
-const CartIcon = ({ onClick }: {onClick: () => void}) => {
-  const cart = useAppSelector((state: { cartItems: CartState }) => state.cartItems)
+const CartIcon = () => {
+  const cart = useAppSelector(
+    (state: { cartItems: CartState }) => state.cartItems
+  );
 
   return (
-    <CartIconContainer onClick={onClick}>
+    <CartIconContainer>
       <ShoppingIcon />
       <ItemCount>{cart.totalItems}</ItemCount>
     </CartIconContainer>
-  )
-}
+  );
+};
 
-export default CartIcon
+export default CartIcon;

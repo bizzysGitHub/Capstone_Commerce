@@ -6,7 +6,7 @@ width: 100%;
 display: flex;
 height: 80px;
 margin-bottom: 15px;
-    border: solid 3px var(--accent-7);
+border: solid 1px var(--accent-12);
 
 
 img {
@@ -25,14 +25,14 @@ padding: 10px 20px;
 `;
 
 export const ItemName = styled.span`
-  font-size: 16px;
-  // color: DodgerBlue
-`;
+  font-size: 14px;
+ color: var(--accent-12)
+ `;
 
 
 export const ItemCount = styled.div`
-  // color:#FDB927
-  color: var(--accent-12) 
+  color: var(--accent-12) ;
+  font-size: 14px;
 `;
 
 /*

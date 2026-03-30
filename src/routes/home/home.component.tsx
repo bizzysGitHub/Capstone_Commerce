@@ -4,7 +4,7 @@ import DirectoryItem from '../../components/directory-item/directory-item.compon
 import { useAppSelector } from '../../app/hooks/custom';
 import Fallback from '../../ui/fall-back';
 
-const DirectoryList = ({ categories }: { categories: Array<{id: number, title: string, imageUrl: string}> }): JSX.Element => (
+const DirectoryList = ({ categories }: { categories: Array<{ id: number, title: string, imageUrl: string }> }): JSX.Element => (
   <Grid columns={{ initial: '1', sm: '2', lg: '3' }} gap="4">
     {categories.map((category) => (
       <DirectoryItem key={category.id} category={category} />
@@ -28,11 +28,10 @@ export default function Home() {
     <Container size="4" p="4">
       <Box>
         <Suspense fallback={<Fallback />}>
-          {isLoading ? (
-            <Fallback />
-          ) : (
-            <DirectoryList categories={groupSortedHomePage} />
-          )}
+          {isLoading
+            ? (<Fallback />)
+            : (<DirectoryList categories={groupSortedHomePage} />)
+          }
         </Suspense>
       </Box>
     </Container>

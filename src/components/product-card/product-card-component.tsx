@@ -13,7 +13,7 @@
 import { useAppDispatch } from "../../app/hooks/custom"
 import { addItemToCart } from "../../features/cart-items/cartItemSlice"
 import { CategoryItem } from "@/utils/types"
-import { Box, Card, Inset, Text, Strong, Flex, Grid, Button } from '@radix-ui/themes'
+import { Box, Card, Inset, Text, Flex, Grid, Button } from '@radix-ui/themes'
 
 type Props = {
   product: CategoryItem
@@ -30,10 +30,10 @@ const ProductCard = ({ product }: Props) => {
   return (
     <Box>
       <Card size="1" variant="surface" style={{ width: "250px" }}>
-        <Flex direction="column" gap="2">
-          <Flex justify="between" align="center"  >
-            <Text size="2" weight="bold" mb="2" color='jade'>{name}</Text>
-            <Text size="2" weight="bold" mb="2" color='jade'>${price}</Text>
+        <Flex direction="column" gap="2" style={{ color: "var(--accent-9)" }}>
+          <Flex justify="between" align="center" >
+            <Text size="3" weight="bold" mb="2" >{name}</Text>
+            <Text size="3" weight="bold" mb="2" >${price}</Text>
           </Flex>
 
           <Inset clip="border-box" side="all" pb="current">
