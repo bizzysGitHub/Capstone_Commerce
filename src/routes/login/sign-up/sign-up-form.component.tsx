@@ -1,156 +1,127 @@
 import { ChangeEvent, FormEvent, useState } from 'react'
-import { handleNewUserWithEmailPassword } from '../../../utils/firebase/firebase';
-import Button from '../../../components/button/button.component';
-import { BaseButton, LogInContainer, SignUpButton } from '../log-in-page.styles'
-import { useAppDispatch, useAppSelector, } from '../../../app/hooks/custom';
+import { handleNewUserWithEmailPassword } from '../../../utils/firebase/firebase'
+import { useAppDispatch } from '../../../app/hooks/custom'
 import { updateUserDataFromSignUp } from '../../../features/user-information/usersSlice'
-import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { RdFormInput } from '@/components/form-input/form-input.component'
 
-
-/**
- * AS of Sep 3 im keeping this useEffect here for the displayname and the confirmPassword
- * I think once i update how this form works with react-form-hooks, I'll be able to check
- * validation of the passwords with zod and not need to keep state in this component. 
- * The email and the password are already in the userSlice, along with the returned data from firebase
- * 
- * Revisions will come soon
- */
-
-
 type FormInfo = {
-    displayName: string,
-    email: string,
-    password: string,
-    confirmPassword: string
+  displayName: string
+  email: string
+  password: string
+  confirmPassword: string
 }
 
-const defaultValues = {
-    displayName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+const defaultValues: FormInfo = {
+  displayName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
 }
 
 const SignUpForm = () => {
+  const [formValues, setFormValues] = useState<FormInfo>(defaultValues)
+  const { displayName, email, password, confirmPassword } = formValues
+  const dispatch = useAppDispatch()
 
-    const darkMode = useAppSelector((state) => state.users.darkMode);
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormValues({ ...formValues, [name]: value })
+  }
 
-    const [formValues, SetFormValues] = useState<FormInfo>(defaultValues);
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-    const { displayName, email, password, confirmPassword, } = formValues;
-    const dispatch = useAppDispatch()
-
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        SetFormValues({ ...formValues, [name]: value })
+    if (password !== confirmPassword) {
+      alert('Passwords do not match')
+      setFormValues({ ...formValues, password: '', confirmPassword: '' })
+      return
     }
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        if (password !== confirmPassword) {
-            alert('passwords do not match')
-            SetFormValues({ ...formValues, ['password']: '', ['confirmPassword']: '' })
-            return;
-        }
-        try {
-
-            const userInfo = await handleNewUserWithEmailPassword(email, password, { displayName });
-            dispatch(updateUserDataFromSignUp(userInfo))
-            SetFormValues(defaultValues);
-
-        } catch (error) {
-            console.log(error);
-            throw new Error("uh-ou email may be in use already")
-            // error.code === 'auth/email-already-in-use' ? alert("uh-oh user already in use :(") : alert(error);
-        }
-
+    try {
+      const userInfo = await handleNewUserWithEmailPassword(email, password, { displayName })
+      dispatch(updateUserDataFromSignUp(userInfo))
+      setFormValues(defaultValues)
+    } catch (error) {
+      console.log(error)
+      throw new Error("Email may already be in use")
     }
-    return (
-        <LogInContainer>
-            <Flex px="6" direction="column" align="center" justify="between" >
-                <Heading
-                    as="h1"
-                    my="4"
-                    size={{ xs: "2", sm: "6" }}
-                    weight="bold"
-                    align="center" >
-                    Don't Have an Account?
-                </Heading>
-                <Heading
-                    size={{ xs: "2", sm: "4" }}
-                    weight="light"
-                    align="center"
-                    color='gray'
-                    as='h2'
+  }
 
-                > Sign up with your email </Heading>
+  return (
+    <section
+      style={{
+        width: '100%',
+        padding: '1.65rem',
+        border: '1px solid var(--panel-border)',
+        borderRadius: 28,
+        background: 'var(--panel-bg)',
+        backdropFilter: 'blur(12px)',
+        boxShadow: '0 20px 48px var(--shadow-color)',
+      }}
+    >
+      <div style={{ display: 'grid', gap: '1rem' }}>
+        <div style={{ display: 'grid', gap: '0.4rem' }}>
+          <h2 style={{ margin: 0, color: 'var(--accent-purple-strong)' }}>Create an account</h2>
+          <p style={{ margin: 0, color: 'var(--text-muted)' }}>Sign up with your email to start shopping.</p>
+        </div>
 
-                <form
-                    className="w-full"
-                    onSubmit={handleSubmit}>
-                    {/* <FormInput
-                        label='Display Name'
-                        required
-                        type="text"
-                        name="displayName"
-                        value={displayName}
-                        onChange={handleInputChange}
-                    /> */}
-                    <RdFormInput
-                        label='Display Name'
-                        value={displayName}
-                        required
-                        type="text"
-                        name="displayName"
-                        onChange={handleInputChange}
-                        variant="classic"
-                        color='jade'
-                        RdLabelProps={{
-                            color: 'jade'
-                        }}
-                    />
-                    <RdFormInput
-                        label='Email'
-                        required
-                        type="text"
-                        name="email"
-                        value={email}
-                        onChange={handleInputChange}
-                        variant="classic"
-                        color='jade'
-                        RdLabelProps={{ color: 'jade' }}
-                    />
-                    <RdFormInput
-                        label='Password'
-                        required
-                        type="password"
-                        name="password"
-                        value={password}
-                        onChange={handleInputChange}
-                        variant="classic"
-                        color='jade'
-                        RdLabelProps={{ color: 'jade' }}
-                    />
-                    <RdFormInput
-                        label='Confirm Password'
-                        required
-                        type="password"
-                        name="confirmPassword"
-                        value={confirmPassword}
-                        onChange={handleInputChange}
-                        variant="classic"
-                        color='jade'
-                        RdLabelProps={{ color: 'jade' }}
-                    />
-                    <SignUpButton variant={darkMode ? "soft" : "outline"}
-                        type="submit"
-                        highContrast
-                        mb="5" >Lets Get Started</SignUpButton>
-                </form>
-            </Flex>
-        </LogInContainer>
-    )
+        <form onSubmit={handleSubmit}>
+          <RdFormInput
+            label='Display Name'
+            value={displayName}
+            required
+            type="text"
+            name="displayName"
+            onChange={handleInputChange}
+            autoComplete="name"
+          />
+          <RdFormInput
+            label='Email'
+            required
+            type="text"
+            name="email"
+            value={email}
+            onChange={handleInputChange}
+            autoComplete="email"
+          />
+          <RdFormInput
+            label='Password'
+            required
+            type="password"
+            name="password"
+            value={password}
+            onChange={handleInputChange}
+            autoComplete="new-password"
+          />
+          <RdFormInput
+            label='Confirm Password'
+            required
+            type="password"
+            name="confirmPassword"
+            value={confirmPassword}
+            onChange={handleInputChange}
+            autoComplete="new-password"
+          />
+          <button
+            type="submit"
+            style={{
+              marginTop: '0.5rem',
+              width: '100%',
+              border: 'none',
+              borderRadius: 16,
+              background: 'linear-gradient(135deg, var(--accent-gold), var(--accent-gold-deep))',
+              color: '#22123d',
+              padding: '0.9rem 1rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+            }}
+          >
+            Lets Get Started
+          </button>
+        </form>
+      </div>
+    </section>
+  )
 }
 
 export default SignUpForm

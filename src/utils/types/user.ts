@@ -8,7 +8,7 @@ export type UserInfo = {
   userDataFromFirebase: DocumentData | string |null,
   isError: boolean,
   isLoading: boolean,
-  darkMode: boolean
+  darkMode: boolean,
+  isAuthResolved: boolean
 
 }
-

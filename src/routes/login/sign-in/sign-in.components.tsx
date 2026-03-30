@@ -1,155 +1,144 @@
 import { ChangeEvent, FormEvent, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Box, Card, Flex, Heading, Text, Button, Grid } from '@radix-ui/themes'
+import { useNavigate } from 'react-router'
 import { RdFormInput } from '../../../components/form-input/form-input.component'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/custom'
-import { clearLoginForm, loginWithEmailAndPassword, loginWithGoogle, userLoginInputChange } from '../../../features/user-information/usersSlice'
-import { redirect, redirectDocument, useNavigate } from 'react-router'
-import { FaceBookButton, GoogleButton, LogInContainer, SignInButton } from '../log-in-page.styles'
+import { loginWithEmailAndPassword, loginWithGoogle, userLoginInputChange } from '../../../features/user-information/usersSlice'
 import GoogleLogo from '@/assets/google.svg?react'
 import FacebookLogo from '@/assets/facebook.svg?react'
 import CapstoneLogo from '@/assets/CapstoneLogo.svg'
 
-
-
+const cardStyle = {
+  width: '100%',
+  padding: '1.65rem',
+  border: '1px solid var(--panel-border)',
+  borderRadius: 28,
+  background: 'var(--panel-bg)',
+  backdropFilter: 'blur(12px)',
+  boxShadow: '0 20px 48px var(--shadow-color)',
+} as const
 
 const SignIn = () => {
+  const { users } = useAppSelector((state) => state)
+  const { email, password, userDataFromFirebase } = users
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
-
-    const { users } = useAppSelector((state) => state);
-    const { email, password, darkMode, userDataFromFirebase } = users
-
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        if (userDataFromFirebase !== null) {
-            navigate('/checkout', { replace: true })
-        }
-    }, [userDataFromFirebase])
-
-
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        await dispatch(loginWithEmailAndPassword(users))
-
+  useEffect(() => {
+    if (userDataFromFirebase !== null) {
+      navigate('/checkout', { replace: true })
     }
+  }, [navigate, userDataFromFirebase])
 
-    const googleLogin = async () => {
-        await dispatch(loginWithGoogle())
-        // dispatch(clearLoginForm())
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    await dispatch(loginWithEmailAndPassword(users))
+  }
 
-    }
+  const googleLogin = async () => {
+    await dispatch(loginWithGoogle())
+  }
 
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    dispatch(userLoginInputChange({ id: name, value }))
+  }
 
-        const { name, value } = e.target;
+  return (
+    <section style={cardStyle}>
+      <div style={{ display: 'grid', gap: '1rem', alignItems: 'center' }}>
+        <img src={CapstoneLogo} alt="Capstone Logo" width="200" style={{ justifySelf: 'center' }} />
+        <div style={{ display: 'grid', gap: '0.4rem' }}>
+          <h2 style={{ margin: 0, color: 'var(--accent-purple-strong)' }}>Welcome back</h2>
+          <p style={{ margin: 0, color: 'var(--text-muted)' }}>Sign in below to continue to checkout.</p>
+        </div>
 
-        dispatch(userLoginInputChange({ id: name, value }))
+        <form onSubmit={handleSubmit}>
+          <RdFormInput
+            label="Email"
+            required
+            type="text"
+            name="email"
+            value={email}
+            onChange={handleInputChange}
+            autoComplete="email"
+          />
+          <RdFormInput
+            label="Password"
+            required
+            type="password"
+            name="password"
+            value={password}
+            onChange={handleInputChange}
+            autoComplete="current-password"
+          />
+          <button
+            type="submit"
+            style={{
+              marginTop: '0.5rem',
+              width: '100%',
+              border: 'none',
+              borderRadius: 16,
+              background: 'linear-gradient(135deg, var(--accent-purple), #7b3fc3)',
+              color: '#fff',
+              padding: '0.9rem 1rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+            }}
+          >
+            Sign In
+          </button>
+        </form>
 
-    }
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div style={{ flex: 1, height: 1, background: 'var(--panel-border)' }} />
+          <p style={{ margin: 0, color: 'var(--text-muted)' }}>or sign in with</p>
+          <div style={{ flex: 1, height: 1, background: 'var(--panel-border)' }} />
+        </div>
 
-
-    return (
-        <LogInContainer>
-            <Flex px="6" direction="column" align="center">
-                <img
-                    src={CapstoneLogo}
-                    alt="Capstone Logo"
-                    width="200px"
-                />
-                <Heading as="h2"
-                    size={{ xs: "2", sm: "5" }}
-                    weight="light"
-                    align="center"
-                    color='gray' >
-                    Welcome back — sign in below
-                </Heading>
-                <form className="w-full" onSubmit={handleSubmit}>
-                    <RdFormInput
-                        label="Email"
-                        required
-                        type="text"
-                        name="email"
-                        value={email}
-                        onChange={handleInputChange}
-                        variant="classic"
-                        color="jade"
-                        RdLabelProps={{ color: 'jade' }}
-                    />
-                    <RdFormInput
-                        label="Password"
-                        required
-                        type="password"
-                        name="password"
-                        value={password}
-                        onChange={handleInputChange}
-                        variant="classic"
-                        color="jade"
-                        RdLabelProps={{ color: 'jade' }}
-                    />
-                    <Box style={{ width: '100%' }} mb="5">
-                        <SignInButton
-                            variant={darkMode ? "soft" : "outline"}
-                            type="submit"
-                            highContrast
-                        >
-                            Sign In
-                        </SignInButton>
-                    </Box>
-                </form>
-                <Flex align="center" justify="center" mb="5" width="100%">
-                    <Box my="0"
-                        style={{
-                            height: '1px',
-                            flexGrow: 1,
-                            backgroundColor: 'var(--gray-7)',
-                        }}
-                    />
-                    <Text size="2" color="gray" className='px-3'>
-                        or sign in with
-                    </Text>
-                    <Box
-                        style={{
-                            height: '1px',
-                            flexGrow: 1,
-                            backgroundColor: 'var(--gray-7)',
-                        }}
-                    />
-                </Flex>
-                <Flex
-                    width="100%"
-                    gap="2"
-                    align="center"
-                    justify="center"
-                    direction={{ initial: 'column', sm: 'row' }}
-                >
-                    <GoogleButton
-                        onClick={googleLogin}
-                        color="gray"
-                        highContrast
-                    >
-                        <Flex align="center" gap="2">
-                            <GoogleLogo />
-                            Google
-                        </Flex>
-                    </GoogleButton>
-                    <FaceBookButton
-                        disabled
-                        onClick={googleLogin}
-                        color="indigo"
-                    >
-                        <Flex align="center" gap="2">
-                            <FacebookLogo />
-                            Facebook
-                        </Flex>
-                    </FaceBookButton>
-                </Flex>
-            </Flex>
-        </LogInContainer>
-    )
-
+        <div style={{ display: 'flex', width: '100%', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            onClick={googleLogin}
+            style={{
+              flex: 1,
+              minWidth: 160,
+              border: 'none',
+              borderRadius: 16,
+              background: 'linear-gradient(135deg, var(--accent-gold), var(--accent-gold-deep))',
+              color: '#22123d',
+              padding: '0.9rem 1rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+            }}
+          >
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+              <GoogleLogo />
+              Google
+            </span>
+          </button>
+          <button
+            type="button"
+            disabled
+            style={{
+              flex: 1,
+              minWidth: 160,
+              border: 'none',
+              borderRadius: 16,
+              background: 'rgba(85, 37, 131, 0.35)',
+              color: '#fff',
+              padding: '0.9rem 1rem',
+              fontWeight: 700,
+            }}
+          >
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+              <FacebookLogo />
+              Facebook
+            </span>
+          </button>
+        </div>
+      </div>
+    </section>
+  )
 }
 
 export default SignIn
-

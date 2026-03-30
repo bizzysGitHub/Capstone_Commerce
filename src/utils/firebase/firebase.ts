@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FirebaseError, initializeApp } from 'firebase/app';
 import {
   getAuth,
@@ -17,19 +16,15 @@ import {
   doc,
   getDoc,
   setDoc,
-  deleteDoc,
   DocumentReference,
   DocumentData,
   DocumentSnapshot,
   writeBatch,
   getDocs,
-  QueryDocumentSnapshot,
-  QuerySnapshot,
   Firestore,
 } from "firebase/firestore";
 import { CategoryItem } from '../types';
-
-import { v4 as uuidv4 } from "uuid";
+import { SHOP_DATA } from '@/data/catalog';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -46,8 +41,6 @@ const auth = getAuth(firebaseApp);
 auth.languageCode = 'it';
 
 const db: Firestore = getFirestore(firebaseApp);
-
-const snapshot: QuerySnapshot<DocumentData> = await getDocs(collection(db, "categories"));
 
 
 const provider = new GoogleAuthProvider();
@@ -79,29 +72,40 @@ export const addFieldsAndDocuments = async (collectionKey: string, objectToAdd: 
 
 };
 
+type CategoryDocument = { [key: string]: { previewImg: string; items: CategoryItem[] } }
 
-export const getCategoriesAndDocs = async (): Promise<{ [key: string]: { previewImg: string; items: CategoryItem[] } }[]> => {
-
-  const itemsDataArray = snapshot.docs.reduce(
-    (
-      itemArr: { [key: string]: { previewImg: string; items: CategoryItem[] } }[],
-      doc
-    ) => {
-      const { items, title, image } = doc.data();
-      const dataEntry = {
-        [title]: {
-          previewImg: image,
-          items: items
-        }
-      };
-      // return [...itemArr, dataEntry];
-      return [...itemArr, dataEntry];
+const getStaticCategories = (): CategoryDocument[] =>
+  SHOP_DATA.map((category) => ({
+    [category.title.toLowerCase()]: {
+      previewImg: category.items[0]?.imageUrl ?? '',
+      items: category.items,
     },
-    []
-  );
+  }))
+
+const getCategoriesSnapshot = async () => await getDocs(collection(db, "categories"))
 
 
-  return itemsDataArray;
+export const getCategoriesAndDocs = async (): Promise<CategoryDocument[]> => {
+  try {
+    const snapshot = await getCategoriesSnapshot()
+
+    return snapshot.docs.reduce((itemArr: CategoryDocument[], categoryDoc) => {
+      const { items, title, image } = categoryDoc.data()
+
+      return [
+        ...itemArr,
+        {
+          [String(title).toLowerCase()]: {
+            previewImg: image,
+            items: items as CategoryItem[],
+          },
+        },
+      ]
+    }, [])
+  } catch (error) {
+    console.error('Falling back to static catalog data.', error)
+    return getStaticCategories()
+  }
 }
 
 export const getDocFromUserAuth = async (userAuth: User, otherInformation: object = {}) => {
@@ -158,7 +162,6 @@ export const handleNewUserWithEmailPassword = async (email: string, password: st
   const { user } = await createUserWithEmailAndPassword(auth, email, password)
   const userInfoFromFirebase = await getDocFromUserAuth(user, additionalInfo)
 
-  // return user 
   return userInfoFromFirebase
 }
 
@@ -192,61 +195,30 @@ export const signUserInWithEmailAndPassword = async (email: string, password: st
 
 export const signOutUser = async () => await signOut(auth)
 
-export const onAuthStateChangeListener = (callback: any) => onAuthStateChanged(auth, callback)
+export const onAuthStateChangeListener = (callback: (user: User | null) => void) => onAuthStateChanged(auth, callback)
 
 export const getItemWithPrice = async () => {
-  const itemsWithPrices = snapshot.docs
-    .reduce((itemObj: { [id: string]: { price: number, name: string } }, category: QueryDocumentSnapshot<DocumentData>) => {
-      const { items } = category.data();
+  try {
+    const snapshot = await getCategoriesSnapshot()
 
-      items.forEach((item: any) => {
-        itemObj[item.id] = { price: item.price, name: item.name }
+    return snapshot.docs.reduce((itemObj: { [id: string]: { price: number, name: string } }, categoryDoc) => {
+      const categoryData = categoryDoc.data() as { items?: CategoryItem[] }
 
-
-        // itemArr.push({
-        //   [item.id]: {
-        //     name: item.name,
-        //     price: item.price
-        //   }
-        // })
-      });
-
-      return itemObj;
-
-    }, {});
-  return itemsWithPrices;
-}
-
-
-//one time use.. not needed anymore 
-/*
-
-const migrateToUUIDs = async () => {
-  const batch = writeBatch(db)
-
-
-  for (const oldDoc of snapshot.docs) {
-    const data = oldDoc.data();
-    const {items, title } = data 
-    
-    const uniqueItems = items.map((item: any) => {
-      const newId = uuidv4();
-      return { ...item, id: newId }
-    }  )
-    // break;
-    try {
-      batch.update(doc(db,'categories',title.toLowerCase()),{
-        ...data, items:uniqueItems
+      categoryData.items?.forEach((item) => {
+        itemObj[String(item.id)] = { price: item.price, name: item.name }
       })
-    } catch (error) {
-      console.error(error)
-      throw Error("Whoops something went wrong ")
-    }
+
+      return itemObj
+    }, {})
+  } catch (error) {
+    console.error('Falling back to static price data.', error)
+
+    return SHOP_DATA.reduce((itemObj: { [id: string]: { price: number, name: string } }, category) => {
+      category.items.forEach((item) => {
+        itemObj[String(item.id)] = { price: item.price, name: item.name }
+      })
+
+      return itemObj
+    }, {})
   }
-  
-  batch.commit()
-};
-
-migrateToUUIDs();
-
-*/
+}

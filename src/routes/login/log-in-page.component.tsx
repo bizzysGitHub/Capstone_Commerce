@@ -1,22 +1,14 @@
-import SignUpForm from './sign-up/sign-up-form.component.tsx'
-import SignIn from './sign-in/sign-in.components.tsx'
-import { LoginPageContainer} from './log-in-page.styles'
-import { Grid, } from '@radix-ui/themes'
-
-
-
+import SignUpForm from './sign-up/sign-up-form.component'
+import SignIn from './sign-in/sign-in.components'
 
 const SignInPage = () => {
-//gap='5' columns='2' width='auto' justify='end'
-
   return (
-    <LoginPageContainer size='2'>
-    <Grid gap='5' justify='center' width='auto' align='stretch'  columns='repeat(auto-fit, minmax(200px, 1fr))'>
-    <SignIn />
-    <SignUpForm />
-    </Grid>
-    
-    </LoginPageContainer>
+    <div style={{ width: '100%', maxWidth: 1240, margin: '0 auto', padding: '0.5rem' }}>
+      <div className="auth-grid">
+        <SignIn />
+        <SignUpForm />
+      </div>
+    </div>
   )
 }
 

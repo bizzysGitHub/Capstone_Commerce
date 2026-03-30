@@ -1,34 +1,28 @@
-import { useParams } from "react-router";
-import ProductCard from "../product-card/product-card-component";
-import { CategoryContainer } from './category.styles'
-import { useAppSelector } from "../../app/hooks/custom";
-import { Suspense } from "react";
-import Fallback from "../../ui/fall-back";
-import { CategoryItem } from "@/utils/types";
-
-
+import { Suspense } from "react"
+import { useParams } from "react-router"
+import { useAppSelector } from "../../app/hooks/custom"
+import { CategoryItem } from "@/utils/types"
+import ProductCard from "../product-card/product-card-component"
+import Fallback from "../../ui/fall-back"
 
 const Categories = () => {
-  const { product } = useParams();
-
-
-  const categoryData = useAppSelector((state) => state.categories)
-  const { categoriesMap } = categoryData
+  const { product } = useParams()
+  const { categoriesMap } = useAppSelector((state) => state.categories)
 
   const allProducts: CategoryItem[] = categoriesMap.flatMap((data) => {
     const category = data[product as string]
     return category ? category.items : []
-
   })
-
 
   return (
     <Suspense fallback={<Fallback />}>
-      <CategoryContainer>
-        {allProducts && allProducts.map((productItem: CategoryItem) => (<ProductCard key={productItem.id} product={productItem} />))}
-      </CategoryContainer>
-    </Suspense>)
-
+      <div className="shop-card-grid">
+        {allProducts.map((productItem) => (
+          <ProductCard key={productItem.id} product={productItem} />
+        ))}
+      </div>
+    </Suspense>
+  )
 }
 
 export default Categories

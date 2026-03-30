@@ -1,30 +1,72 @@
-import { Stripe } from "stripe";
-import { CategoryItem } from "../types";
+import { loadStripe } from '@stripe/stripe-js'
+import { CategoryItem } from '../types'
 
-const stripe = new Stripe(import.meta.env.VITE_STRIPE_SK_KEY, {
-     apiVersion: '2025-03-31.basil' as Stripe.LatestApiVersion
-})
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK_KEY)
 
-export const session = async (cartItems : CategoryItem[]) => {
-     const items = cartItems.map((item) => ({
-          price_data: {
-               currency: 'usd',
-               product_data: {
-                    name: item.name,
-               },
-               unit_amount: item.price ,
-          },
-          quantity: item.quantity,
+type CheckoutPayloadItem = {
+  id: string
+  quantity: number
+}
 
-     }))
-     console.log(items);
-     
-    const sess1 = await stripe.checkout.sessions.create({
-          line_items: items,
-          mode:'payment',
-          ui_mode:'custom',
-          // redirect_on_completion:'never'
-          // return_url:'http://localhost:5173/return?session_id={CHECKOUT_SESSION_ID}'
-     })
-     return sess1.client_secret
+const buildCheckoutItems = (cartItems: CategoryItem[]): CheckoutPayloadItem[] =>
+  cartItems
+    .filter((item) => (item.quantity ?? 0) > 0)
+    .map((item) => ({
+      id: String(item.id),
+      quantity: item.quantity ?? 0,
+    }))
+
+export const redirectToStripeCheckout = async (cartItems: CategoryItem[]) => {
+  const items = buildCheckoutItems(cartItems)
+
+  if (items.length === 0) {
+    throw new Error('Your cart is empty.')
+  }
+
+  const response = await fetch('/api/stripe/create-checkout-session', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ items }),
+  })
+
+  if (!response.ok) {
+    const errorPayload = await response.json().catch(() => null)
+    throw new Error(errorPayload?.error ?? 'Unable to start Stripe checkout.')
+  }
+
+  const { sessionId } = (await response.json()) as { sessionId?: string }
+
+  if (!sessionId) {
+    throw new Error('Stripe session was not created.')
+  }
+
+  const stripe = await stripePromise
+
+  if (!stripe) {
+    throw new Error('Stripe.js failed to load.')
+  }
+
+  const result = await stripe.redirectToCheckout({ sessionId })
+
+  if (result.error) {
+    throw new Error(result.error.message ?? 'Stripe redirect failed.')
+  }
+}
+
+export const verifyStripeCheckoutSession = async (sessionId: string) => {
+  const response = await fetch(`/api/stripe/checkout-session?session_id=${encodeURIComponent(sessionId)}`)
+
+  if (!response.ok) {
+    const errorPayload = await response.json().catch(() => null)
+    throw new Error(errorPayload?.error ?? 'Unable to verify Stripe payment.')
+  }
+
+  return (await response.json()) as {
+    id: string
+    status: string | null
+    paymentStatus: string | null
+    verifiedPaid: boolean
+  }
 }
